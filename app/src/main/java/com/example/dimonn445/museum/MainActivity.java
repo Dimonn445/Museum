@@ -103,25 +103,17 @@ public class MainActivity extends AppCompatActivity
 
 //--------------------------------Fill Content end-------------------------------------
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                Toast.makeText(MainActivity.this, "Loading...", Toast.LENGTH_LONG).show();
                 Snackbar.make(view, getString(R.string.update_category_list), Snackbar.LENGTH_SHORT)
                         .setAction("Action", null).show();
-//                Log.d("ok", "fab click");
-/*                if (isNetworkAvailable()) {
-
-                }*/
-//                Log.d("OK", "getAllCat: " + getAllCat);
                 if (isNetworkAvailable()) {
-                    /*ApiClient client = new ApiClient(getString(R.string.BASE_API_URL), MainActivity.this);
-                    String getAllCat = client.getJsonArray(getString(R.string.api_category));*/
                     String getAllCat = "";
                     mt = new MyTask();
                     mt.execute();
-//                getAllCat = client.getJsonArray(getString(R.string.api_category));
                     try {
                         getAllCat = mt.get();
                     } catch (InterruptedException e) {
@@ -159,7 +151,7 @@ public class MainActivity extends AppCompatActivity
                     Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        });*/
 //--------------------------------Navigation Drawer start-------------------------------------
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

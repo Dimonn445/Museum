@@ -67,8 +67,9 @@ public class ExhibitsListActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         getStatus();
         all_exh = getIntent().getBooleanExtra("all_exh", false);
-        fav_exh = getIntent().getBooleanExtra("fav_exh", false);
 
+        fav_exh = getIntent().getBooleanExtra("fav_exh", false);
+//        chek = true;
         if (getIntent().getBooleanExtra("Check", false)) {
             catId = getIntent().getStringExtra("CatId");
             catName = getIntent().getStringExtra("CatName");
@@ -76,7 +77,10 @@ public class ExhibitsListActivity extends AppCompatActivity
             chek = false;
             /*Log.d("OK", "CatId: " + catId);
             Log.d("OK", "CatName: " + catName);*/
+        }else {
+            catId = getIntent().getStringExtra("CatIdd");
         }
+
         catName = getIntent().getStringExtra("CatName");
         setTitle(catName);
         //--------------------------------Fill Content start-------------------------------------
@@ -105,7 +109,12 @@ public class ExhibitsListActivity extends AppCompatActivity
 
                 Intent intent = new Intent(ExhibitsListActivity.this, ExhibitActivity.class);
                 intent.putExtra("ExhId", exhibitsId.get(position));
+                if(all_exh)
+                    intent.putExtra("all_exhh",all_exh);
+                if(fav_exh)
+                    intent.putExtra("fav_exhh",fav_exh);
                 intent.putExtra("CatName", catName);
+                intent.putExtra("CatIdd", catId);
                 intent.putExtra("ExhName", "" + buildExhibits.nameById(exhibitsId.get(position)));
                 intent.putExtra("Check", true);
                 startActivity(intent);
@@ -119,6 +128,7 @@ public class ExhibitsListActivity extends AppCompatActivity
             public void onScrollStateChanged(AbsListView view, int scrollState) {
 
             }
+
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
                                  int totalItemCount) {
@@ -500,10 +510,16 @@ public class ExhibitsListActivity extends AppCompatActivity
                     if (all_exh) {
                         getAllExhibits = client.getJsonArray(getString(R.string.api_exhibit_all) + param);
                     } else {
+//                        chek = false;
                         if (!chek) {
+//                            Log.d("OK", "CHECK1: " + chek);
                             getAllExhibits = client.getJsonArray(getString(R.string.api_exhibit_category) + catId + param);
+//                            chek = true;
                         } else {
-                            getAllExhibits = loadStatus();
+//                            Log.d("OK", "CHECK2: " + chek);
+//                            getAllExhibits = loadStatus();
+                            getAllExhibits = client.getJsonArray(getString(R.string.api_exhibit_category) + catId + param);
+
                         }
                     }
                 }
@@ -545,7 +561,6 @@ public class ExhibitsListActivity extends AppCompatActivity
                 buildExhibits = new ExhibitsListBuilder(data);
                 ALLdata = data;
             }
-
             saveStatus(ALLdata);
             buildExhibits.getExhId();
 
@@ -567,13 +582,11 @@ public class ExhibitsListActivity extends AppCompatActivity
                 } else {
                     img = getString(R.string.BASE_API_URL) + buildExhibits.imgById(exhibitsId.get(i));
                 }
-
                 exhibits.add(new ExhibitsList(name, body, img, date));
             }
             int index = lvMain.getFirstVisiblePosition();
             int top = (lvMain.getChildAt(0) == null) ? 0 : lvMain.getChildAt(0).getTop();
             lvMain.setSelectionFromTop(index, top);
-
             exhibitsListAdapter.notifyDataSetChanged();
             lvMain.deferNotifyDataSetChanged();
             lvMain.removeFooterView(footer);

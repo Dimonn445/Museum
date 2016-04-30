@@ -48,7 +48,7 @@ public class ExhibitActivity extends AppCompatActivity
     private TextView exhibitname, exhibitdescription, exhibiturl, exhibitCharacteristics, readMore;
     private SliderLayout mSlider;
     private String crop_string = "", bodyShort = "", art_title = "", body = "", exhId, dateStarted, dateFinish, mainImg;
-    private String ExhId, ExhName, catName;
+    private String ExhId, ExhName, catName, catId;
     final String APP_PREFERENCES = "EXHIBIT";
     final String EXHIBIT_PREFERENCES = "SAVED_EXHIBITS";
     private int width, height;
@@ -57,6 +57,7 @@ public class ExhibitActivity extends AppCompatActivity
     private Boolean chek;
     private MyTask mt;
     private CheckBox checkFavourite;
+    private boolean all_exh, fav_exh;
 
 //https://github.com/daimajia/AndroidImageSlider
 //http://square.github.io/picasso/
@@ -69,17 +70,25 @@ public class ExhibitActivity extends AppCompatActivity
         height = this.getResources().getDisplayMetrics().heightPixels;
         getStatus();
 
+        all_exh = getIntent().getBooleanExtra("all_exhh",false);
+        fav_exh = getIntent().getBooleanExtra("fav_exhh",false);
+
         if (getIntent().getBooleanExtra("Check", false)) {
             ExhId = getIntent().getStringExtra("ExhId");
             ExhName = getIntent().getStringExtra("ExhName");
             catName = getIntent().getStringExtra("CatName");
+            catId = getIntent().getStringExtra("CatIdd");
+            Log.d("OK", "CatIdrrrrrrrrrrrrrrr: " + catId);
+
 //            Log.d("OK", "CATNAME: " + catName);
             chek = false;
+//            all_exh = false;
             setTitle(ExhName);
         } else {
             catName = getIntent().getStringExtra("CatName");
             setTitle(ExhName);
             chek = true;
+//            all_exh = false;
         }
 
         /*Log.d("OK", "ExhId: " + ExhId);
@@ -523,6 +532,12 @@ public class ExhibitActivity extends AppCompatActivity
         } else {
             Intent intent = new Intent(ExhibitActivity.this, ExhibitsListActivity.class);
             intent.putExtra("Check", false);
+            intent.putExtra("CatIdd", catId);
+            Log.d("OK", "CatIdddddddddddd: " + catId);
+            if(all_exh)
+                intent.putExtra("all_exh", true);
+            if(fav_exh)
+                intent.putExtra("fav_exh", true);
             intent.putExtra("CatName", catName);
             startActivity(intent);
             finish();
