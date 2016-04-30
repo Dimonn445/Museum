@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">KSPU museum</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_test2">test2Activity</string>
+    <string name="title_activity_exhibits">Exhibits</string>
+    <string name="title_activity_exhibit">ExhibitActivity</string>
+    <string name="add_to_fav">додати до улюблених</string>
+    <string name="fav">Улюблені</string>
+    <string name="read_more">Читати далі...</string>
+    <string name="brief_description">короткий опис:</string>
+    <string name="characteristics">Характеристики:</string>
+    <string name="Sifting">Посинання</string>
+    <string name="image">зображення </string>
+    <string name="BASE_API_URL">http://kspu-museum.in.ua:3021</string>
+    <string name="api_exhibit">/api/exhibit/</string>
+    <string name="api_exhibit_category">/api/exhibit/category/</string>
+    <string name="api_category">/api/category?img=1</string>
+    <string name="api_exhibit_all">/api/exhibit</string>
+    <string name="quit_dialog_are_you_sure">Вихід: Ви впевнені?</string>
+    <string name="quit_dialog_yes">Так</string>
+    <string name="quit_dialog_no">Ні</string>
+    <string name="internet_connection_is_not">Відсутнє підключення до інтернету</string>
+    <string name="loading">Завантаження…</string>
+    <string name="connection_is_missing">Підключення до серверу відсутнє</string>
+    <string name="update_category_list">Оновити список категорій</string>
+    <string name="you_are_at_home">Ви на головній</string>
+    <string name="exit">Вихід</string>
+    <string name="home">На головну</string>
+    <string name="fm_name">Фізико-математичний факультет</string>
+    <string name="museum_name">Музей Історії Техніки</string>
+    <string name="search">Пошук</string>
+    <string name="all_exhibits">Всі експонати</string>
+    <string name="error_loading_items">Помилка завантаження</string>
+    <string name="del_fav">Видалити з улюблених?</string>
+    <string name="fav_ch">вподобано</string>
+    <string name="reload">Перепідключитися</string>
+    <string name="title_activity_image">ImageActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+</resources>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="6dip"
+    android:paddingBottom="5dip">
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:src="@android:drawable/ic_dialog_info"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:contentDescription="ExhibitImg"
+        android:foregroundGravity="center_vertical"
+        android:layout_alignBottom="@+id/exhibitDate" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/exhibitName"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/icon"
+        android:paddingLeft="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/exhibitListDescription"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/exhibitName"
+        android:singleLine="true"
+        android:layout_alignLeft="@+id/exhibitName"
+        android:layout_alignStart="@+id/exhibitName"
+        android:paddingLeft="12dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="01.02.2016"
+        android:id="@+id/exhibitDate"
+        android:textStyle="italic"
+        android:layout_below="@+id/exhibitListDescription"
+        android:layout_alignRight="@+id/exhibitListDescription"
+        android:layout_alignEnd="@+id/exhibitListDescription"
+        android:textSize="10dp" />
+
+
+</RelativeLayout>

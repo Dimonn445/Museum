@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.dimonn445.museum.ExhibitActivity"
+    tools:showIn="@layout/app_bar_exhibit">
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBoxFav"
+        android:button="@drawable/selector_check"
+        android:text="@string/add_to_fav"
+        android:padding="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <com.daimajia.slider.library.SliderLayout
+        android:id="@+id/slider"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:layout_below="@+id/checkBoxFav"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/exhibitName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="exhibitName"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_below="@+id/slider"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/exhibitDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/exhibitName"
+        android:paddingLeft="10dip"
+        android:password="false"
+        android:singleLine="false"
+        android:text="exhibitDescription"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceButton"
+        android:text="@string/read_more"
+        android:id="@+id/exhibitReadMore"
+        android:clickable="false"
+        android:layout_below="@+id/exhibitDescription"
+        android:layout_alignRight="@+id/checkBoxFav"
+        android:layout_alignEnd="@+id/checkBoxFav"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="15dp" />
+
+    <TextView
+        android:id="@+id/exhibitCharacteristics"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/exhibitDescription"
+        android:text="exhibitCharacteristics"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_toLeftOf="@+id/exhibitReadMore"
+        android:layout_toStartOf="@+id/exhibitReadMore" />
+
+    <TextView
+        android:id="@+id/exhibitUrls"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/exhibitCharacteristics"
+        android:linksClickable="true"
+        android:paddingLeft="10dip"
+        android:text="exhibitUrls"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="italic"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp" />
+</RelativeLayout>
