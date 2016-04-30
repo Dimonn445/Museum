@@ -152,6 +152,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });*/
+
 //--------------------------------Navigation Drawer start-------------------------------------
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
