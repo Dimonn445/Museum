@@ -56,6 +56,7 @@ public class ApiClient {
         } else {
             Toast.makeText(context, context.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
         }
+
         return buff;*/
         String buff = "";
         if (isNetworkAvailable()) {
