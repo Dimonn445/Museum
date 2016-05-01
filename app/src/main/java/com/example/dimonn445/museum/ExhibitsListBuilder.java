@@ -65,7 +65,8 @@ public class ExhibitsListBuilder {
                     if (data.getString("dateStarted").equals("null") || data.getString("dateFinish").equals("null")) {
                         return "null";
                     } else {
-                        buff = data.getString("dateStarted");
+                        buff = "Роки використання: ";
+                        buff += data.getString("dateStarted");
                         buff += " / ";
                         buff += data.getString("dateFinish");
                         return buff;

@@ -78,7 +78,7 @@ public class ExhibitActivity extends AppCompatActivity
             ExhName = getIntent().getStringExtra("ExhName");
             catName = getIntent().getStringExtra("CatName");
             catId = getIntent().getStringExtra("CatId");
-            Log.d("OK", "CatIdrrrrrrrrrrrrrrr: " + catId);
+            Log.d("OK", "CatId: " + catId);
 
 //            Log.d("OK", "CATNAME: " + catName);
             chek = false;
@@ -356,9 +356,13 @@ public class ExhibitActivity extends AppCompatActivity
             body = exh.getBody();
             if(body.isEmpty()||body.equals("null")){
                 readMore.setVisibility(View.INVISIBLE);
+                exhibitdescription.setVisibility(View.INVISIBLE);
+                exhibitname.setText(ExhName);
+            }else {
+                exhibitname.setText(ExhName + " " + getString(R.string.brief_description));
             }
 //        readMore.setText("Читати далі...");
-            exhibitname.setText(ExhName + " " + getString(R.string.brief_description));
+//            exhibitname.setText(ExhName + " " + getString(R.string.brief_description));
             exhibitdescription.setText(crop_string);
             String charackeristics = exh.getCharacteristics();
             if (charackeristics.isEmpty()) {
