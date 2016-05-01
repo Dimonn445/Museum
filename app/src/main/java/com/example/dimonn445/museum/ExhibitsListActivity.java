@@ -114,7 +114,7 @@ public class ExhibitsListActivity extends AppCompatActivity
                 if(fav_exh)
                     intent.putExtra("fav_exhh",fav_exh);
                 intent.putExtra("CatName", catName);
-                intent.putExtra("CatIdd", catId);
+                intent.putExtra("CatId", catId);
                 intent.putExtra("ExhName", "" + buildExhibits.nameById(exhibitsId.get(position)));
                 intent.putExtra("Check", true);
                 startActivity(intent);

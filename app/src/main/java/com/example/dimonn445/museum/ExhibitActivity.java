@@ -77,7 +77,7 @@ public class ExhibitActivity extends AppCompatActivity
             ExhId = getIntent().getStringExtra("ExhId");
             ExhName = getIntent().getStringExtra("ExhName");
             catName = getIntent().getStringExtra("CatName");
-            catId = getIntent().getStringExtra("CatIdd");
+            catId = getIntent().getStringExtra("CatId");
             Log.d("OK", "CatIdrrrrrrrrrrrrrrr: " + catId);
 
 //            Log.d("OK", "CATNAME: " + catName);
@@ -134,9 +134,11 @@ public class ExhibitActivity extends AppCompatActivity
                 Intent intent = new Intent(ExhibitActivity.this, DescriptionActivity.class);
                 intent.putExtra("artdescr", body);
                 intent.putExtra("ExhName", ExhName);
-                intent.putExtra("ExhId", ExhId);
+//                intent.putExtra("ExhId", ExhId);
+//                Log.d("OK", "ExhId before DESCRACTI: " + ExhId);
+//                intent.putExtra("catId", catId);
                 startActivity(intent);
-                finish();
+//                finish();
             }
         });
 
@@ -146,9 +148,11 @@ public class ExhibitActivity extends AppCompatActivity
                 Intent intent = new Intent(ExhibitActivity.this, DescriptionActivity.class);
                 intent.putExtra("artdescr", body);
                 intent.putExtra("ExhName", ExhName);
-                intent.putExtra("ExhId", ExhId);
+//                intent.putExtra("ExhId", ExhId);
+//                Log.d("OK", "ExhId before DESCRACTI: "+ExhId);
+//                intent.putExtra("catId", catId);
                 startActivity(intent);
-                finish();
+//                finish();
             }
         });
 
@@ -533,7 +537,7 @@ public class ExhibitActivity extends AppCompatActivity
             Intent intent = new Intent(ExhibitActivity.this, ExhibitsListActivity.class);
             intent.putExtra("Check", false);
             intent.putExtra("CatIdd", catId);
-            Log.d("OK", "CatIdddddddddddd: " + catId);
+            Log.d("OK", "CatId before ExhListAct+: " + catId);
             if(all_exh)
                 intent.putExtra("all_exh", true);
             if(fav_exh)

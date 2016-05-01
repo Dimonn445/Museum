@@ -14,7 +14,7 @@ import android.widget.TextView;
 public class DescriptionActivity extends AppCompatActivity {
     WebView wv;
     String ExhName;
-    String ExhId;
+    String ExhId, catId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,24 +25,28 @@ public class DescriptionActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String artdescr = intent.getStringExtra("artdescr");
         ExhName = intent.getStringExtra("ExhName");
-        ExhId = intent.getStringExtra("ExhId");
+        /*ExhId = intent.getStringExtra("ExhId");
+        catId = intent.getStringExtra("catId");
+        Log.d("OK", "ExhId IN DESCRACTI: "+ExhId);*/
         setTitle(ExhName);
         String html_value = artdescr;
         wv.getSettings().setJavaScriptEnabled(true);
         wv.loadData(html_value, "text/html;charset=UTF-8", null);
     }
 
-    @Override
+    /*@Override
     public void onBackPressed() {
         Intent intent = new Intent(DescriptionActivity.this, ExhibitActivity.class);
         intent.putExtra("ExhName", ExhName);
         intent.putExtra("ExhId", ExhId);
         intent.putExtra("Check", true);
+        Log.d("OK", "ExhId AFTER DESCRACTI: " + ExhId);
+        intent.putExtra("catId", catId);
         startActivity(intent);
         finish();
-    }
+    }*/
 
-    @Override
+    /*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -60,5 +64,5 @@ public class DescriptionActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 }
