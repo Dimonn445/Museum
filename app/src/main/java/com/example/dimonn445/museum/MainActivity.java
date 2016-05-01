@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, CategoriesAdapter.customButtonListener, CategoriesAdapter.customTextListener {
 
     //    private Button test;
     private JSONArray categoryArr;
@@ -83,10 +83,11 @@ public class MainActivity extends AppCompatActivity
 //--------------------------------Fill Content start-------------------------------------
 
         categoriesAdapter = new CategoriesAdapter(this, categories);
+        categoriesAdapter.setCustomButtonListner(MainActivity.this);
+        categoriesAdapter.setCustomTextListener(MainActivity.this);
         lvMain.setAdapter(categoriesAdapter);
         fillData();
         lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
@@ -100,6 +101,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);*/
             }
         });
+
 
 //--------------------------------Fill Content end-------------------------------------
 
@@ -164,6 +166,24 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    public void onButtonClickListner(int position) {
+        /*Toast.makeText(MainActivity.this, "Button click " + position,
+                Toast.LENGTH_SHORT).show();*/
+        newCall(position);
+    }
+
+    @Override
+    public void onTextListener(int position) {
+        /*Toast.makeText(MainActivity.this, "Button click Text" + position,
+                Toast.LENGTH_SHORT).show();*/
+        try {
+            nextCall(position);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 //    --------------------------------Navigation Drawer end-------------------------------------
 
@@ -296,15 +316,27 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private void newCall(int pos) {
+//        categoryBuffer = buildCategory.subcategoryNext(rootCategIdd.get(pos));
+        String selectedCat = rootCategIdd.get(pos);
+//        Log.d("OK", "SELECTEDID: " + selectedCat);
+        rootCategIdd.clear();
+        Intent intent = new Intent(MainActivity.this, ExhibitsListActivity.class);
+        intent.putExtra("CatId", selectedCat);
+        intent.putExtra("CatName", "" + buildCategory.nameById(selectedCat));
+        intent.putExtra("Check", true);
+        startActivity(intent);
+        finish();
+
+    }
+
     private void nextCall(int pos) {
 //        try {
 //            Log.d("OK", "nextCAll()");
 //        Log.d("OK","rootCategIdd.get "+rootCategIdd.get(pos));
         categoryBuffer = buildCategory.subcategoryNext(rootCategIdd.get(pos));
         String selectedCat = rootCategIdd.get(pos);
-
-        Log.d("OK", "SELECTEDID: " + selectedCat);
-
+//        Log.d("OK", "SELECTEDID: " + selectedCat);
         prevCategID.add(selectedCat);
             /*for(int i=0;i<prevCategID.size();i++){
                 Log.d("OK","prevCategID: "+prevCategID.get(i));
@@ -548,6 +580,7 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 
     //--------------------------------Navigation Drawer end-------------------------------------
     class MyTask extends AsyncTask<Void, Void, String> {

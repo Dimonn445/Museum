@@ -76,14 +76,25 @@
         android:id="@+id/firstLine"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
         android:text="Example application"
         android:textSize="22sp"
-        android:layout_alignBottom="@+id/icon"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/icon"
-        android:layout_toEndOf="@+id/icon"
-        android:layout_alignParentLeft="false"
-        android:gravity="center_vertical|center_horizontal" />
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/childImageButton"
+        android:layout_toStartOf="@+id/childImageButton" />
+
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="80dp"
+        android:id="@+id/childImageButton"
+        android:layout_alignTop="@+id/firstLine"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_expand_more_black_48dp"/>
 
 </RelativeLayout>
