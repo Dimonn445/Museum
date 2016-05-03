@@ -28,10 +28,10 @@ public class ExhibitsListBuilder {
 
     public void getExhId() {
         try {
-//            Log.d("categoryArr ", exhibitsArr.toString());
+            Log.d("categoryArr ", exhibitsArr.toString());
             for (int i = 0; i < exhibitsArr.length(); i++) {
                 JSONObject data = exhibitsArr.getJSONObject(i);
-//            Log.d("_id ", "ID: " + data.getString("_id"));
+            Log.d("_id ", "ID: " + data.getString("_id"));
                 exhibitId.add(data.getString("_id"));
             }
         } catch (JSONException e) {

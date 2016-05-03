@@ -19,6 +19,7 @@
     <string name="api_exhibit_category">/api/exhibit/category/</string>
     <string name="api_category">/api/category?img=1</string>
     <string name="api_exhibit_all">/api/exhibit</string>
+    <string name="api_exhibit_search">/api/exhibit?search=</string>
     <string name="quit_dialog_are_you_sure">Вихід: Ви впевнені?</string>
     <string name="quit_dialog_yes">Так</string>
     <string name="quit_dialog_no">Ні</string>
@@ -38,6 +39,7 @@
     <string name="fav_ch">вподобано</string>
     <string name="reload">Перепідключитися</string>
     <string name="title_activity_image">ImageActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="search_no_responce">Пошук не дав результатів</string>
+    <string name="kategory_no_responce">Порожня категорія</string>
+
 </resources>

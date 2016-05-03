@@ -1,6 +1,8 @@
 package com.example.dimonn445.museum;
 
 import android.app.AlertDialog;
+import android.app.SearchManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +13,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -324,7 +328,7 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(MainActivity.this, ExhibitsListActivity.class);
         intent.putExtra("CatId", selectedCat);
         intent.putExtra("CatName", "" + buildCategory.nameById(selectedCat));
-        intent.putExtra("Check", true);
+//        intent.putExtra("Check", true);
         startActivity(intent);
         finish();
 
@@ -353,7 +357,7 @@ public class MainActivity extends AppCompatActivity
                 Intent intent = new Intent(MainActivity.this, ExhibitsListActivity.class);
                 intent.putExtra("CatId", selectedCat);
                 intent.putExtra("CatName", "" + buildCategory.nameById(selectedCat));
-                intent.putExtra("Check", true);
+//                intent.putExtra("Check", true);
                 startActivity(intent);
                 finish();
             } else {
@@ -505,10 +509,44 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+
+        SearchView search = (SearchView) menu.findItem(R.id.search).getActionView();
+        search.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // User pressed the search button
+                Log.d("OK", "TextSubmit");
+                Intent intent = new Intent(MainActivity.this, ExhibitsListActivity.class);
+                intent.putExtra("search_data", true);
+                intent.putExtra("CatName", getString(R.string.search));
+                intent.putExtra("search_query", query);
+                startActivity(intent);
+                finish();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                // User changed the text
+                Log.d("OK", "TextChange");
+                Log.d("OK", "query: "+query);
+                return true;
+            }
+
+        });
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        search.setSearchableInfo(searchManager.getSearchableInfo(
+                new ComponentName(this, MainActivity.class)));
+        search.setIconifiedByDefault(false);
+
         return true;
     }
 
-    @Override
+
+    /*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -516,12 +554,13 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.search) {
+            Log.d("OK","SEARCH");
 //            setmatrixofbuttons();
 
 //            Toast.makeText(this, "ЖМЯК", Toast.LENGTH_LONG).show();
 
-            /*categories.clear();
+            *//*categories.clear();
 
             for (int i = 1; i <= 20; i++) {
 
@@ -530,13 +569,13 @@ public class MainActivity extends AppCompatActivity
                 categoriesAdapter.notifyDataSetChanged();
                 lvMain.deferNotifyDataSetChanged();
 
-            }*/
+            }*//*
 
             return true;
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

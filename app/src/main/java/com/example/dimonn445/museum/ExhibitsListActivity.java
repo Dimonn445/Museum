@@ -1,6 +1,8 @@
 package com.example.dimonn445.museum;
 
 import android.app.AlertDialog;
+import android.app.SearchManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +12,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -54,9 +57,9 @@ public class ExhibitsListActivity extends AppCompatActivity
     private int MAX_COUNT;
     private int PAGES = 1;
     private View footer;
-    private LoadMoreAsyncTask loadingTask = new LoadMoreAsyncTask();
-    private String ALLdata = "";
-    private boolean all_exh, fav_exh;
+    private LoadMoreAsyncTask loadingTask;
+    private String ALLdata = "", search_query;
+    private boolean all_exh, fav_exh, search_data;
     final String EXHIBIT_PREFERENCES = "SAVED_EXHIBITS";
 
     @Override
@@ -65,23 +68,37 @@ public class ExhibitsListActivity extends AppCompatActivity
         setContentView(R.layout.activity_exhibits_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getStatus();
+//        getStatus();
         all_exh = getIntent().getBooleanExtra("all_exh", false);
-
         fav_exh = getIntent().getBooleanExtra("fav_exh", false);
+//        chek = getIntent().getBooleanExtra("Check", false);
+        Log.d("OK", "fav_exh: " + fav_exh + " all_exh: " + all_exh + " search_data: " + search_data/*+ " chek: "+chek*/);
+
 //        chek = true;
-        if (getIntent().getBooleanExtra("Check", false)) {
-            catId = getIntent().getStringExtra("CatId");
+        if (fav_exh) {
             catName = getIntent().getStringExtra("CatName");
-            setTitle(catName);
-            chek = false;
-            /*Log.d("OK", "CatId: " + catId);
-            Log.d("OK", "CatName: " + catName);*/
-        }else {
-            catId = getIntent().getStringExtra("CatIdd");
         }
 
+//        if (chek) {
+        catId = getIntent().getStringExtra("CatId");
+        Log.d("OK", "CatId after ExhAct: " + catId);
+
         catName = getIntent().getStringExtra("CatName");
+//        setTitle(catName);
+//            chek = false;
+//            Log.d("OK", "CatId: " + catId);
+//            Log.d("OK", "CatName: " + catName);
+//        } else {
+//            catId = getIntent().getStringExtra("CatId");
+//        }
+//        search_data = false;
+//        catName = getIntent().getStringExtra("CatName");
+        search_data = getIntent().getBooleanExtra("search_data", false);
+        if (search_data) {
+            search_query = getIntent().getStringExtra("search_query");
+            all_exh = false;
+            fav_exh = false;
+        }
         setTitle(catName);
         //--------------------------------Fill Content start-------------------------------------
         fillData();
@@ -99,6 +116,7 @@ public class ExhibitsListActivity extends AppCompatActivity
                                     int position, long id) {
 
                 buildExhibits = new ExhibitsListBuilder(ALLdata);
+                Log.d("OK", "ALLdata: " + ALLdata);
                 buildExhibits.getExhId();
                 exhibitsId = buildExhibits.exhibitId;
 
@@ -109,11 +127,16 @@ public class ExhibitsListActivity extends AppCompatActivity
 
                 Intent intent = new Intent(ExhibitsListActivity.this, ExhibitActivity.class);
                 intent.putExtra("ExhId", exhibitsId.get(position));
-                if(all_exh)
-                    intent.putExtra("all_exhh",all_exh);
-                if(fav_exh)
-                    intent.putExtra("fav_exhh",fav_exh);
+                if (all_exh)
+                    intent.putExtra("all_exhh", all_exh);
+                if (fav_exh)
+                    intent.putExtra("fav_exhh", fav_exh);
+                if (search_data) {
+                    intent.putExtra("search_data", true);
+                    intent.putExtra("search_query", search_query);
+                }
                 intent.putExtra("CatName", catName);
+                Log.d("OK", "catId before ExhibitActivity: " + catId);
                 intent.putExtra("CatId", catId);
                 intent.putExtra("ExhName", "" + buildExhibits.nameById(exhibitsId.get(position)));
                 intent.putExtra("Check", true);
@@ -247,6 +270,7 @@ public class ExhibitsListActivity extends AppCompatActivity
     }
 
     private void fillData() {
+        loadingTask = new LoadMoreAsyncTask();
         loadingTask.execute();
 /*
         String getAllExhibits = "";
@@ -310,7 +334,7 @@ public class ExhibitsListActivity extends AppCompatActivity
         Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
     }*/
 
-    private void saveStatus(String exhibits) {
+    /*private void saveStatus(String exhibits) {
         sPref = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         editor = sPref.edit();
         editor.putString(APP_PREFERENCES, exhibits);
@@ -346,7 +370,7 @@ public class ExhibitsListActivity extends AppCompatActivity
         } else {
             chek = false;
         }
-    }
+    }*/
 
     //--------------------------------Navigation Drawer start-------------------------------------
     @Override
@@ -400,10 +424,47 @@ public class ExhibitsListActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+
+        SearchView search = (SearchView) menu.findItem(R.id.search).getActionView();
+        search.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // User pressed the search button
+                Log.d("OK", "TextSubmit");
+                search_data = true;
+                search_query = query;
+                /*LoadMoreAsyncTask loadTask = new LoadMoreAsyncTask();
+                loadTask.execute();*/
+                exhibits.clear();
+                exhibitsListAdapter.notifyDataSetChanged();
+                lvMain.deferNotifyDataSetChanged();
+                all_exh = false;
+                fav_exh = false;
+                PAGES = 1;
+                fillData();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                // User changed the text
+                Log.d("OK", "TextChange");
+                Log.d("OK", "query: " + query);
+                return true;
+            }
+
+        });
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        search.setSearchableInfo(searchManager.getSearchableInfo(
+                new ComponentName(this, MainActivity.class)));
+        search.setIconifiedByDefault(false);
         return true;
     }
 
-    @Override
+    /*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -412,13 +473,13 @@ public class ExhibitsListActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            /*Intent intent = new Intent(ExhibitsListActivity.this, MainActivity.class);
-            startActivity(intent);*/
+            *//*Intent intent = new Intent(ExhibitsListActivity.this, MainActivity.class);
+            startActivity(intent);*//*
             return true;
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -510,16 +571,21 @@ public class ExhibitsListActivity extends AppCompatActivity
                     if (all_exh) {
                         getAllExhibits = client.getJsonArray(getString(R.string.api_exhibit_all) + param);
                     } else {
-//                        chek = false;
-                        if (!chek) {
-//                            Log.d("OK", "CHECK1: " + chek);
-                            getAllExhibits = client.getJsonArray(getString(R.string.api_exhibit_category) + catId + param);
-//                            chek = true;
+                        if (search_data) {
+                            getAllExhibits = client.getJsonArray(getString(R.string.api_exhibit_search) + search_query);
+                            catName = getString(R.string.search);
                         } else {
+//                        chek = false;
+//                            if (!chek) {
+//                            Log.d("OK", "CHECK1: " + chek);
+//                                getAllExhibits = client.getJsonArray(getString(R.string.api_exhibit_category) + catId + param);
+//                            chek = true;
+//                            } else {
 //                            Log.d("OK", "CHECK2: " + chek);
 //                            getAllExhibits = loadStatus();
-                            getAllExhibits = client.getJsonArray(getString(R.string.api_exhibit_category) + catId + param);
+                                getAllExhibits = client.getJsonArray(getString(R.string.api_exhibit_category) + catId + param);
 
+//                            }
                         }
                     }
                 }
@@ -533,6 +599,7 @@ public class ExhibitsListActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(String data) {
 //            try {
+
             if (data.isEmpty()) {
                 Toast.makeText(ExhibitsListActivity.this, getString(R.string.error_loading_items), Toast.LENGTH_SHORT).show();
                 lvMain.removeFooterView(footer);
@@ -561,12 +628,24 @@ public class ExhibitsListActivity extends AppCompatActivity
                 buildExhibits = new ExhibitsListBuilder(data);
                 ALLdata = data;
             }
-            saveStatus(ALLdata);
+//            saveStatus(ALLdata);
             buildExhibits.getExhId();
 
             exhibitsId = buildExhibits.exhibitId;
             MAX_COUNT = buildExhibits.getCount();
-            setTitle(catName + " (" + MAX_COUNT + ")");
+            if (MAX_COUNT == 0) {
+                Log.d("OK", "MAX_COUNT = 0");
+                if (search_data)
+                    Toast.makeText(ExhibitsListActivity.this, getString(R.string.search_no_responce), Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(ExhibitsListActivity.this, getString(R.string.kategory_no_responce), Toast.LENGTH_SHORT).show();
+                /*exhibits.clear();
+                exhibitsListAdapter.notifyDataSetChanged();
+                lvMain.deferNotifyDataSetChanged();*/
+                setTitle(catName);
+            } else {
+                setTitle(catName + " (" + MAX_COUNT + ")");
+            }
             PAGES++;
             Log.d("OK", "PAGES: " + PAGES);
             for (int i = 0; i < exhibitsId.size(); i++) {

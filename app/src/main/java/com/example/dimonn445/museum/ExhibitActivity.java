@@ -47,7 +47,7 @@ public class ExhibitActivity extends AppCompatActivity
 
     private TextView exhibitname, exhibitdescription, exhibiturl, exhibitCharacteristics, readMore;
     private SliderLayout mSlider;
-    private String crop_string = "", bodyShort = "", art_title = "", body = "", exhId, dateStarted, dateFinish, mainImg;
+    private String crop_string = "", bodyShort = "", art_title = "", body = "", exhId, dateStarted, dateFinish, mainImg, search_query;
     private String ExhId, ExhName, catName, catId;
     final String APP_PREFERENCES = "EXHIBIT";
     final String EXHIBIT_PREFERENCES = "SAVED_EXHIBITS";
@@ -57,7 +57,7 @@ public class ExhibitActivity extends AppCompatActivity
     private Boolean chek;
     private MyTask mt;
     private CheckBox checkFavourite;
-    private boolean all_exh, fav_exh;
+    private boolean all_exh, fav_exh, search_data;
 
 //https://github.com/daimajia/AndroidImageSlider
 //http://square.github.io/picasso/
@@ -72,7 +72,10 @@ public class ExhibitActivity extends AppCompatActivity
 
         all_exh = getIntent().getBooleanExtra("all_exhh",false);
         fav_exh = getIntent().getBooleanExtra("fav_exhh",false);
-
+        search_data = getIntent().getBooleanExtra("search_data",false);
+        if(search_data){
+            search_query = getIntent().getStringExtra("search_query");
+        }
         if (getIntent().getBooleanExtra("Check", false)) {
             ExhId = getIntent().getStringExtra("ExhId");
             ExhName = getIntent().getStringExtra("ExhName");
@@ -539,13 +542,17 @@ public class ExhibitActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             Intent intent = new Intent(ExhibitActivity.this, ExhibitsListActivity.class);
-            intent.putExtra("Check", false);
-            intent.putExtra("CatIdd", catId);
+//            intent.putExtra("Check", false);
+            intent.putExtra("CatId", catId);
             Log.d("OK", "CatId before ExhListAct+: " + catId);
             if(all_exh)
                 intent.putExtra("all_exh", true);
             if(fav_exh)
                 intent.putExtra("fav_exh", true);
+            if(search_data){
+                intent.putExtra("search_data",true);
+                intent.putExtra("search_query", search_query);
+            }
             intent.putExtra("CatName", catName);
             startActivity(intent);
             finish();
@@ -581,7 +588,7 @@ public class ExhibitActivity extends AppCompatActivity
         quitDialog.show();
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
@@ -603,7 +610,7 @@ public class ExhibitActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
