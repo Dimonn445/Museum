@@ -90,7 +90,11 @@ public class MainActivity extends AppCompatActivity
         categoriesAdapter.setCustomButtonListner(MainActivity.this);
         categoriesAdapter.setCustomTextListener(MainActivity.this);
         lvMain.setAdapter(categoriesAdapter);
-        fillData();
+        if (isNetworkAvailable())
+            fillData();
+        else
+            Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
+
         lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
@@ -532,7 +536,7 @@ public class MainActivity extends AppCompatActivity
             public boolean onQueryTextChange(String query) {
                 // User changed the text
                 Log.d("OK", "TextChange");
-                Log.d("OK", "query: "+query);
+                Log.d("OK", "query: " + query);
                 return true;
             }
 

@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -101,13 +103,17 @@ public class ExhibitsListActivity extends AppCompatActivity
         }
         setTitle(catName);
         //--------------------------------Fill Content start-------------------------------------
-        fillData();
+        if (isNetworkAvailable())
+            fillData();
+        else
+            Toast.makeText(this, this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
         exhibitsListAdapter = new ExhibitsListAdapter(this, exhibits);
 
         lvMain = (ListView) findViewById(R.id.lwexhibits);
         lvMain.setLongClickable(true);
         footer = getLayoutInflater().inflate(R.layout.listview_footer, null);
-        lvMain.addFooterView(footer);
+        if (isNetworkAvailable())
+            lvMain.addFooterView(footer);
         lvMain.setAdapter(exhibitsListAdapter);
         lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -234,6 +240,16 @@ public class ExhibitsListActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         //--------------------------------Navigation Drawer end-------------------------------------
 
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager manager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        boolean isAvailable = false;
+        if (networkInfo != null && networkInfo.isConnected()) {
+            isAvailable = true;
+        }
+        return isAvailable;
     }
 
     private void DeleteExhref(String exhId) {
@@ -574,6 +590,7 @@ public class ExhibitsListActivity extends AppCompatActivity
                         if (search_data) {
                             getAllExhibits = client.getJsonArray(getString(R.string.api_exhibit_search) + search_query);
                             catName = getString(R.string.search);
+                            exhibits.clear();
                         } else {
 //                        chek = false;
 //                            if (!chek) {
@@ -583,7 +600,7 @@ public class ExhibitsListActivity extends AppCompatActivity
 //                            } else {
 //                            Log.d("OK", "CHECK2: " + chek);
 //                            getAllExhibits = loadStatus();
-                                getAllExhibits = client.getJsonArray(getString(R.string.api_exhibit_category) + catId + param);
+                            getAllExhibits = client.getJsonArray(getString(R.string.api_exhibit_category) + catId + param);
 
 //                            }
                         }
