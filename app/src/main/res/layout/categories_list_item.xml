@@ -95,6 +95,6 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:background="@android:color/transparent"
-        android:src="@drawable/ic_expand_more_black_48dp"/>
+        android:src="@drawable/ic_keyboard_arrow_right_black_36dp"/>
 
 </RelativeLayout>
