@@ -180,18 +180,24 @@ public class MainActivity extends AppCompatActivity
     public void onButtonClickListner(int position) {
         /*Toast.makeText(MainActivity.this, "Button click " + position,
                 Toast.LENGTH_SHORT).show();*/
-        newCall(position);
+//        newCall(position);
+        try {
+            nextCall(position);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onTextListener(int position) {
         /*Toast.makeText(MainActivity.this, "Button click Text" + position,
                 Toast.LENGTH_SHORT).show();*/
-        try {
+        newCall(position);
+        /*try {
             nextCall(position);
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 //    --------------------------------Navigation Drawer end-------------------------------------
 
