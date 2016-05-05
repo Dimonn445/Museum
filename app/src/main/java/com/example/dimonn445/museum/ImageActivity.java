@@ -54,6 +54,7 @@ public class ImageActivity extends AppCompatActivity {
 //        String url = getIntent().getStringExtra("URL");
         ArrayList<String> arrayList;
         arrayList = getIntent().getStringArrayListExtra("img_arr");
+        int cur_pos = getIntent().getIntExtra("cur_pos",0);
         /*for (int i = 0; i < arrayList.size(); i++) {
             Log.d("OK", "img_arr: " + arrayList);
         }*/
@@ -89,7 +90,7 @@ public class ImageActivity extends AppCompatActivity {
                     .putString("extra", name);
             mSlider.addSlider(sliderView);
         }
-        mSlider.setCurrentPosition(0);
+        mSlider.setCurrentPosition(cur_pos);
         mSlider.setPresetTransformer(SliderLayout.Transformer.DepthPage);
         mSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
         mSlider.setCustomAnimation(new DescriptionAnimation());
