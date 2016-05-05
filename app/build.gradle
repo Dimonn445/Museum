@@ -3,13 +3,15 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         debug {
-            storeFile file("/home/dimonn445/Dropbox/PROGRAMMING/android key store/my_key.jks")
+            storeFile file("H:\\Dropbox\\PROGRAMMING\\android key store\\my_key.jks")
+//            storeFile file("/home/dimonn445/Dropbox/PROGRAMMING/android key store/my_key.jks")
             storePassword "htubcnhfwbz445"
             keyAlias "dimonn445"
             keyPassword "htubcnhfwbz445"
         }
         release {
-            storeFile file("/home/dimonn445/Dropbox/PROGRAMMING/android key store/my_key.jks")
+            storeFile file("H:\\Dropbox\\PROGRAMMING\\android key store\\my_key.jks")
+//            storeFile file("/home/dimonn445/Dropbox/PROGRAMMING/android key store/my_key.jks")
             storePassword "htubcnhfwbz445"
             keyAlias "dimonn445"
             keyPassword "htubcnhfwbz445"
