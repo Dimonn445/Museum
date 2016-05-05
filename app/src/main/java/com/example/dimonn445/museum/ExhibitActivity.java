@@ -99,7 +99,10 @@ public class ExhibitActivity extends AppCompatActivity
 
         FindViev();
 
-        FillData();
+        if (isNetworkAvailable()) {
+            FillData();
+        } else
+            Toast.makeText(this, this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
         checkExhPref();
 
         //--------------------------------Navigation Drawer start-------------------------------------
@@ -318,7 +321,7 @@ public class ExhibitActivity extends AppCompatActivity
 //        ApiClient client = new ApiClient(getString(R.string.BASE_API_URL), this);
 //        exhibitJson = client.getJsonArray(getString(R.string.api_exhibit) + ExhId);
 //        Log.d("OK","JSONNNN: "+exhibitJson);
-            ExhibitBuilder exh;
+            final ExhibitBuilder exh;
 //        exh = new ExhibitBuilder(exhibitJson, this);
 
             if (!chek) {
@@ -408,6 +411,7 @@ public class ExhibitActivity extends AppCompatActivity
             exhibiturl.setMovementMethod(LinkMovementMethod.getInstance());
 
 //--------------------------slider--------------------
+            final ArrayList<String> img_arr = new ArrayList<String>();
 
             HashMap<String, String> url_maps = new HashMap<String, String>();
             for (int i = 0; i < exh.imgCdn.size(); i++) {
@@ -416,8 +420,10 @@ public class ExhibitActivity extends AppCompatActivity
                     Log.d("OK", "IMGCDN: null");
                 } else {
                     url_maps.put(getString(R.string.image) + i, exh.imgCdn.get(i));
+                    img_arr.add(exh.imgCdn.get(i));
                 }
             }
+
 //        url_maps.put("img","http://17047.s.time4vps.eu:3021/uploads/image/7/7/77757a49145dea723271fcf336fff670_md.jpg");
         /*url_maps.put("Hannibal", "http://static2.hypable.com/wp-content/uploads/2013/12/hannibal-season-2-release-date.jpg");
         url_maps.put("Big Bang Theory", "http://tvfiles.alphacoders.com/100/hdclearart-10.png");*/
@@ -453,9 +459,10 @@ public class ExhibitActivity extends AppCompatActivity
                             @Override
                             public void onSliderClick(BaseSliderView slider) {
 //                                Toast.makeText(ExhibitActivity.this, slider.getUrl() + "",Toast.LENGTH_SHORT).show();
-                                Log.d("OK", "URL: " + slider.getUrl());
+//                                Log.d("OK", "URL: " + slider.getUrl());
                                 Intent intent = new Intent(ExhibitActivity.this, ImageActivity.class);
-                                intent.putExtra("URL", slider.getUrl());
+                                intent.putExtra("img_arr",img_arr);
+//                                intent.putExtra("URL", slider.getUrl());
                                 startActivity(intent);
                             }
                         });

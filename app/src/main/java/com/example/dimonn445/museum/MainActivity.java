@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         if (getIntent().getBooleanExtra("Exit me", false)) {
 //            Log.d("OK", "Exit me " + getIntent().getBooleanExtra("Exit me", false));
             MainActivity.this.getSharedPreferences(APP_PREFERENCES, 0).edit().clear().apply();
@@ -90,9 +91,9 @@ public class MainActivity extends AppCompatActivity
         categoriesAdapter.setCustomButtonListner(MainActivity.this);
         categoriesAdapter.setCustomTextListener(MainActivity.this);
         lvMain.setAdapter(categoriesAdapter);
-        if (isNetworkAvailable())
+        if (isNetworkAvailable()) {
             fillData();
-        else
+        } else
             Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
 
         lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -180,18 +181,24 @@ public class MainActivity extends AppCompatActivity
     public void onButtonClickListner(int position) {
         /*Toast.makeText(MainActivity.this, "Button click " + position,
                 Toast.LENGTH_SHORT).show();*/
-        newCall(position);
+//        newCall(position);
+        try {
+            nextCall(position);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onTextListener(int position) {
         /*Toast.makeText(MainActivity.this, "Button click Text" + position,
                 Toast.LENGTH_SHORT).show();*/
-        try {
+        /*try {
             nextCall(position);
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
+        newCall(position);
     }
 //    --------------------------------Navigation Drawer end-------------------------------------
 

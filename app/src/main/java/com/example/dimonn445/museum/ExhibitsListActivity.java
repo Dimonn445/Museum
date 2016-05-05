@@ -71,21 +71,22 @@ public class ExhibitsListActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 //        getStatus();
-        all_exh = getIntent().getBooleanExtra("all_exh", false);
-        fav_exh = getIntent().getBooleanExtra("fav_exh", false);
+
+            all_exh = getIntent().getBooleanExtra("all_exh", false);
+            fav_exh = getIntent().getBooleanExtra("fav_exh", false);
 //        chek = getIntent().getBooleanExtra("Check", false);
-        Log.d("OK", "fav_exh: " + fav_exh + " all_exh: " + all_exh + " search_data: " + search_data/*+ " chek: "+chek*/);
+            Log.d("OK", "fav_exh: " + fav_exh + " all_exh: " + all_exh + " search_data: " + search_data/*+ " chek: "+chek*/);
 
 //        chek = true;
-        if (fav_exh) {
-            catName = getIntent().getStringExtra("CatName");
-        }
+            if (fav_exh) {
+                catName = getIntent().getStringExtra("CatName");
+            }
 
 //        if (chek) {
-        catId = getIntent().getStringExtra("CatId");
-        Log.d("OK", "CatId after ExhAct: " + catId);
+            catId = getIntent().getStringExtra("CatId");
+            Log.d("OK", "CatId after ExhAct: " + catId);
 
-        catName = getIntent().getStringExtra("CatName");
+            catName = getIntent().getStringExtra("CatName");
 //        setTitle(catName);
 //            chek = false;
 //            Log.d("OK", "CatId: " + catId);
@@ -95,17 +96,17 @@ public class ExhibitsListActivity extends AppCompatActivity
 //        }
 //        search_data = false;
 //        catName = getIntent().getStringExtra("CatName");
-        search_data = getIntent().getBooleanExtra("search_data", false);
-        if (search_data) {
-            search_query = getIntent().getStringExtra("search_query");
-            all_exh = false;
-            fav_exh = false;
-        }
-        setTitle(catName);
-        //--------------------------------Fill Content start-------------------------------------
-        if (isNetworkAvailable())
+            search_data = getIntent().getBooleanExtra("search_data", false);
+            if (search_data) {
+                search_query = getIntent().getStringExtra("search_query");
+                all_exh = false;
+                fav_exh = false;
+            }
+            setTitle(catName);
+            //--------------------------------Fill Content start-------------------------------------
+        if (isNetworkAvailable()) {
             fillData();
-        else
+        } else
             Toast.makeText(this, this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
         exhibitsListAdapter = new ExhibitsListAdapter(this, exhibits);
 

@@ -14,7 +14,7 @@
     <string name="characteristics">Характеристики:</string>
     <string name="Sifting">Посинання</string>
     <string name="image">зображення </string>
-    <string name="BASE_API_URL">http://kspu-museum.in.ua</string>
+    <string name="BASE_API_URL">http://admin.kspu-museum.in.ua</string>
     <string name="api_exhibit">/api/exhibit/</string>
     <string name="api_exhibit_category">/api/exhibit/category/</string>
     <string name="api_category">/api/category?img=1</string>
