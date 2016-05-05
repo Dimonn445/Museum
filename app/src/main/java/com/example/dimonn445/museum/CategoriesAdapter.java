@@ -76,7 +76,7 @@ public class CategoriesAdapter extends BaseAdapter {
         TextView tv = (TextView) view.findViewById(R.id.firstLine);
         tv.setText(p.name);
 //        ((ImageView) view.findViewById(R.id.icon)).setImageResource(p.image);
-        Picasso.with(ctx).load(p.image)/*.resize(200, 200)*/.into(((ImageView) view.findViewById(R.id.icon)));
+        Picasso.with(ctx).load(p.image).error(R.drawable.ic_report_problem_black_36dp)/*.resize(200, 200)*/.into(((ImageView) view.findViewById(R.id.icon)));
 
         ImageButton btn = (ImageButton) view.findViewById(R.id.childImageButton);
         btn.setOnClickListener(new View.OnClickListener() {

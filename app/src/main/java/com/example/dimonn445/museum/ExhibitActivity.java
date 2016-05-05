@@ -461,8 +461,9 @@ public class ExhibitActivity extends AppCompatActivity
 //                                Toast.makeText(ExhibitActivity.this, slider.getUrl() + "",Toast.LENGTH_SHORT).show();
 //                                Log.d("OK", "URL: " + slider.getUrl());
                                 Intent intent = new Intent(ExhibitActivity.this, ImageActivity.class);
-                                intent.putExtra("img_arr",img_arr);
-//                                intent.putExtra("URL", slider.getUrl());
+                                intent.putExtra("img_arr", img_arr);
+                                intent.putExtra("cur_pos", mSlider.getCurrentPosition());
+//                                Log.d("OK","mSlider.getCurrentPosition(); "+mSlider.getCurrentPosition());
                                 startActivity(intent);
                             }
                         });
