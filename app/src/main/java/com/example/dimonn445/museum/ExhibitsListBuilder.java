@@ -31,12 +31,12 @@ public class ExhibitsListBuilder {
             Log.d("categoryArr ", exhibitsArr.toString());
             for (int i = 0; i < exhibitsArr.length(); i++) {
                 JSONObject data = exhibitsArr.getJSONObject(i);
-            Log.d("_id ", "ID: " + data.getString("_id"));
+                Log.d("_id ", "ID: " + data.getString("_id"));
                 exhibitId.add(data.getString("_id"));
             }
         } catch (JSONException e) {
             e.printStackTrace();
-        } catch (NullPointerException e1){
+        } catch (NullPointerException e1) {
             e1.printStackTrace();
         }
     }
@@ -62,13 +62,16 @@ public class ExhibitsListBuilder {
             for (int i = 0; i < exhibitsArr.length(); i++) {
                 JSONObject data = exhibitsArr.getJSONObject(i);
                 if (data.getString("_id").equals(id)) {
-                    if (data.getString("dateStarted").equals("null") || data.getString("dateFinish").equals("null")) {
+                    if (data.getString("dateStarted").equals("null") /*|| data.getString("dateFinish").equals("null")*/) {
                         return "null";
                     } else {
                         buff = "Роки використання: ";
                         buff += data.getString("dateStarted");
                         buff += " / ";
-                        buff += data.getString("dateFinish");
+                        if (data.getString("dateFinish").equals("null"))
+                            buff += "...";
+                        else
+                            buff += data.getString("dateFinish");
                         return buff;
                     }
                 }
@@ -113,11 +116,11 @@ public class ExhibitsListBuilder {
         return "null";
     }
 
-    public int getCount(){
-        int count=0;
+    public int getCount() {
+        int count = 0;
         try {
             count = Integer.parseInt(dataJsonObj.getString("count"));
-            Log.d("OK","COUNT: "+count);
+            Log.d("OK", "COUNT: " + count);
         } catch (JSONException e) {
             e.printStackTrace();
         }
