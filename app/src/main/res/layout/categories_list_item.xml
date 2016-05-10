@@ -55,10 +55,11 @@
         android:src="@android:drawable/ic_menu_info_details"
         android:layout_alignParentRight="true" />
 </RelativeLayout >-->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
-    android:padding="6dip" >
+    android:padding="6dip"
+    android:weightSum="1">
 
     <ImageView
         android:id="@+id/icon"
@@ -74,22 +75,22 @@
 
     <TextView
         android:id="@+id/firstLine"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="128dp"
+        android:layout_height="match_parent"
         android:layout_alignWithParentIfMissing="true"
         android:text="Example application"
         android:textSize="22sp"
         android:gravity="center_vertical|center_horizontal"
         android:layout_alignTop="@+id/icon"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_alignBottom="@+id/icon"
         android:layout_toLeftOf="@+id/childImageButton"
-        android:layout_toStartOf="@+id/childImageButton" />
+        android:layout_toRightOf="@+id/icon"
+        android:layout_toEndOf="@+id/icon"
+        android:layout_weight="0.96" />
 
     <ImageButton
         android:layout_width="50dp"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:id="@+id/childImageButton"
         android:layout_alignTop="@+id/firstLine"
         android:layout_alignParentBottom="true"
@@ -99,4 +100,4 @@
         android:layout_alignParentEnd="true"
         android:padding="20dp" />
 
-</RelativeLayout>
+</LinearLayout>

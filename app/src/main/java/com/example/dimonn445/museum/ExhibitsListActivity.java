@@ -217,18 +217,19 @@ public class ExhibitsListActivity extends AppCompatActivity
         //--------------------------------Fill Content end-------------------------------------
         //--------------------------------Navigation Drawer start-------------------------------------
 
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_exh_list);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                *//*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*//*
+                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();*/
                 Log.d("ok", "fab click");
-                getSharedPreferences(APP_PREFERENCES, 0).edit().clear().apply();
+//                getSharedPreferences(APP_PREFERENCES, 0).edit().clear().apply();
                 Intent intent = new Intent(ExhibitsListActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
             }
-        });*/
+        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

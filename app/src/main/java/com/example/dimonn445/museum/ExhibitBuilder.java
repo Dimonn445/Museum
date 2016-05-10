@@ -42,7 +42,7 @@ public class ExhibitBuilder {
 
     public String getBodyShort() {
         try {
-            return exhArr.getString("bodyShort");
+            return exhArr.getString("bodyShort").replace('"', '”');
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -67,7 +67,7 @@ public class ExhibitBuilder {
         return "null";
     }
 
-    public String getExhTitle(){
+    public String getExhTitle() {
         try {
             return exhArr.getString("title");
         } catch (JSONException e) {
@@ -76,7 +76,7 @@ public class ExhibitBuilder {
         return "null";
     }
 
-    public String getDateStarted(){
+    public String getDateStarted() {
         try {
             return exhArr.getString("dateStarted");
         } catch (JSONException e) {
@@ -85,7 +85,7 @@ public class ExhibitBuilder {
         return "null";
     }
 
-    public String getDateFinish(){
+    public String getDateFinish() {
         try {
             return exhArr.getString("dateFinish");
         } catch (JSONException e) {
@@ -135,9 +135,9 @@ public class ExhibitBuilder {
 //                Log.d("OK", "getMediaDocs(): " + data.getString("relativepath"));
 //                mediaCdn.add(context.getString(R.string.BASE_API_URL) + data.getString("relativepath"));
                 String description;
-                if(data.getString("description").isEmpty()){
+                if (data.getString("description").isEmpty()) {
                     description = data.getString("originalname");
-                }else {
+                } else {
                     description = data.getString("description");
                 }
                 mediaCdn.add("<a href=\"" + context.getString(R.string.BASE_API_URL) + data.getString("relativepath") + "\">" + description + "</a>");

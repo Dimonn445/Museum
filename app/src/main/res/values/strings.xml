@@ -1,15 +1,16 @@
 <resources>
     <string name="app_name">KSPU museum</string>
-
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_test2">test2Activity</string>
     <string name="title_activity_exhibits">Exhibits</string>
     <string name="title_activity_exhibit">ExhibitActivity</string>
-    <string name="add_to_fav">додати до улюблених</string>
-    <string name="fav">Улюблені</string>
-    <string name="read_more">Читати далі...</string>
+    <string name="add_to_fav">зберегти</string>
+    <string name="fav">Збережені</string>
+    <string name="del_fav">Видалити?</string>
+    <string name="fav_ch">збережено</string>
+    <string name="read_more">Повний опис…</string>
     <string name="brief_description">короткий опис:</string>
     <string name="characteristics">Характеристики:</string>
     <string name="Sifting">Посинання</string>
@@ -35,11 +36,8 @@
     <string name="search">Пошук</string>
     <string name="all_exhibits">Всі експонати</string>
     <string name="error_loading_items">Помилка завантаження</string>
-    <string name="del_fav">Видалити з улюблених?</string>
-    <string name="fav_ch">вподобано</string>
     <string name="reload">Перепідключитися</string>
     <string name="title_activity_image">ImageActivity</string>
     <string name="search_no_responce">Пошук не дав результатів</string>
     <string name="kategory_no_responce">Порожня категорія</string>
-
 </resources>

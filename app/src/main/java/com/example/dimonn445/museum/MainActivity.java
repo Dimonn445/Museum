@@ -114,55 +114,42 @@ public class MainActivity extends AppCompatActivity
 
 //--------------------------------Fill Content end-------------------------------------
 
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_main);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                Toast.makeText(MainActivity.this, "Loading...", Toast.LENGTH_LONG).show();
-                Snackbar.make(view, getString(R.string.update_category_list), Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();
-                if (isNetworkAvailable()) {
-                    String getAllCat = "";
-                    mt = new MyTask();
-                    mt.execute();
-                    try {
-                        getAllCat = mt.get();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    }
-                    saveStatus(getAllCat);
+                /*Snackbar.make(view, getString(R.string.update_category_list), Snackbar.LENGTH_SHORT)
+                        .setAction("Action", null).show();*/
+                if (buildCategory.parentById(rootCategIdd.get(0)).equals("null")) {
+                    openQuitDialog();
+                } else {
+                    String getAllCat;
+                    getAllCat = loadStatus();
                     try {
                         buildCategory = new CategoryBuilder(getAllCat, MainActivity.this);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                     buildCategory.getCatId();
-//                    rootCategIdd ;
                     try {
                         if (rootCategIdd.isEmpty()) {
                             rootCategIdd = buildCategory.rootCategId;
                         } else {
-//                        if (rootCategIdd.size() > 0) {
                             rootCategIdd.clear();
-//                        }
                         }
                     } catch (NullPointerException e) {
                         e.printStackTrace();
                     }
 
                     rootCategIdd = buildCategory.rootCategId;
-//                    Log.d("OK", "rootCategIdd.toString(): " + rootCategIdd.toString());
                     categories.clear();
                     categoriesAdapter.notifyDataSetChanged();
                     lvMain.deferNotifyDataSetChanged();
                     firstCall();
-                } else {
-                    Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
                 }
             }
-        });*/
+        });
 
 //--------------------------------Navigation Drawer start-------------------------------------
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -595,8 +582,35 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            Toast.makeText(this, getString(R.string.you_are_at_home), Toast.LENGTH_LONG).show();
             // Handle the camera action
+            if (buildCategory.parentById(rootCategIdd.get(0)).equals("null")) {
+                Toast.makeText(this, getString(R.string.you_are_at_home), Toast.LENGTH_LONG).show();
+//                Log.d("OK","\"");
+            } else {
+                String getAllCat;
+                getAllCat = loadStatus();
+                try {
+                    buildCategory = new CategoryBuilder(getAllCat, MainActivity.this);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                buildCategory.getCatId();
+                try {
+                    if (rootCategIdd.isEmpty()) {
+                        rootCategIdd = buildCategory.rootCategId;
+                    } else {
+                        rootCategIdd.clear();
+                    }
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+
+                rootCategIdd = buildCategory.rootCategId;
+                categories.clear();
+                categoriesAdapter.notifyDataSetChanged();
+                lvMain.deferNotifyDataSetChanged();
+                firstCall();
+            }
         } else if (id == R.id.nav_favourite) {
             Intent intent = new Intent(MainActivity.this, ExhibitsListActivity.class);
             intent.putExtra("fav_exh", true);

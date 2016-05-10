@@ -76,7 +76,7 @@ public class ImageActivity extends AppCompatActivity {
             sliderView
 //                    .description(name)
                     .image(url_maps.get(name))
-                    .error(R.drawable.ic_report_problem_black_48dp)
+                    .error(R.drawable.ic_report_problem_white_48dp)
                     .setScaleType(BaseSliderView.ScaleType.CenterInside)
                     .setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
                         @Override

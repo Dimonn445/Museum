@@ -1,6 +1,7 @@
 package com.example.dimonn445.museum;
 
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebView;
 import android.widget.TextView;
 
@@ -32,6 +34,18 @@ public class DescriptionActivity extends AppCompatActivity {
         String html_value = artdescr;
         wv.getSettings().setJavaScriptEnabled(true);
         wv.loadData(html_value, "text/html;charset=UTF-8", null);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_descr);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                obp();
+            }
+        });
+    }
+
+    private void obp() {
+        super.onBackPressed();
     }
 
     /*@Override

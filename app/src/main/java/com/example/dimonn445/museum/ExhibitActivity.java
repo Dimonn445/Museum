@@ -9,6 +9,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -109,20 +111,30 @@ public class ExhibitActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_exh);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                *//*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*//*
-                Log.d("ok", "fab click");
+                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                Log.d("ok", "fab click");*/
                 Intent intent = new Intent(ExhibitActivity.this, ExhibitsListActivity.class);
-                intent.putExtra("Check", false);
+//            intent.putExtra("Check", false);
+                intent.putExtra("CatId", catId);
+                Log.d("OK", "CatId before ExhListAct+: " + catId);
+                if(all_exh)
+                    intent.putExtra("all_exh", true);
+                if(fav_exh)
+                    intent.putExtra("fav_exh", true);
+                if(search_data){
+                    intent.putExtra("search_data",true);
+                    intent.putExtra("search_query", search_query);
+                }
                 intent.putExtra("CatName", catName);
                 startActivity(intent);
                 finish();
             }
-        });*/
+        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -358,6 +370,7 @@ public class ExhibitActivity extends AppCompatActivity
             } else {
                 crop_string = bodyShort;
             }
+//            Log.d("OK","crop_string: "+crop_string);
             exhId = exh.getId();
             body = exh.getBody();
             if(body.isEmpty()||body.equals("null")){
