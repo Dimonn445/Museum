@@ -381,10 +381,10 @@ public class MainActivity extends AppCompatActivity
         height = display.getHeight();*/
 //        Log.d("Resolution", "resolution: " + width + " x " + height);
         if (width <= 480 && height <= 800) {
-            return "_sm.jpg";
+            return "_md.jpg";
         } else {
             if (width <= 800 && height <= 1280) {
-                return "_md.jpg";
+                return "_lg.jpg";
             } else {
                 return "_lg.jpg";
             }

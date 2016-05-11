@@ -19,7 +19,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:dividerHeight="1dp"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:paddingBottom="60dp" />
     <!--android:background="@android:drawable/dialog_holo_light_frame"-->
 
 
