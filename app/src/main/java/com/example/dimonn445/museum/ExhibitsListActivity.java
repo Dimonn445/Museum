@@ -10,10 +10,12 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
@@ -444,7 +446,15 @@ public class ExhibitsListActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.main, menu);
         SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
-        SearchView search = (SearchView) menu.findItem(R.id.search).getActionView();
+//        SearchView search = (SearchView) menu.findItem(R.id.search).getActionView();
+        SearchView search = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+            search = (SearchView) menu.findItem(R.id.search).getActionView();
+        }else {
+            MenuItem searchItem = menu.findItem(R.id.search);
+            search = (SearchView) MenuItemCompat.getActionView(searchItem);
+        }
+
         search.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
@@ -458,7 +468,9 @@ public class ExhibitsListActivity extends AppCompatActivity
                 loadTask.execute();*/
                 exhibits.clear();
                 exhibitsListAdapter.notifyDataSetChanged();
-                lvMain.deferNotifyDataSetChanged();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                    lvMain.deferNotifyDataSetChanged();
+                }
                 all_exh = false;
                 fav_exh = false;
                 PAGES = 1;
@@ -686,7 +698,9 @@ public class ExhibitsListActivity extends AppCompatActivity
             int top = (lvMain.getChildAt(0) == null) ? 0 : lvMain.getChildAt(0).getTop();
             lvMain.setSelectionFromTop(index, top);
             exhibitsListAdapter.notifyDataSetChanged();
-            lvMain.deferNotifyDataSetChanged();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                lvMain.deferNotifyDataSetChanged();
+            }
             lvMain.removeFooterView(footer);
         }
     }

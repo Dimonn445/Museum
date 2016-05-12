@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -145,7 +146,9 @@ public class MainActivity extends AppCompatActivity
                     rootCategIdd = buildCategory.rootCategId;
                     categories.clear();
                     categoriesAdapter.notifyDataSetChanged();
-                    lvMain.deferNotifyDataSetChanged();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                        lvMain.deferNotifyDataSetChanged();
+                    }
                     firstCall();
                 }
             }
@@ -220,7 +223,9 @@ public class MainActivity extends AppCompatActivity
             rootCategIdd = buildCategory.rootCategId;
             categories.clear();
             categoriesAdapter.notifyDataSetChanged();
-            lvMain.deferNotifyDataSetChanged();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                lvMain.deferNotifyDataSetChanged();
+            }
             firstCall();
         } else {
             Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
@@ -290,7 +295,9 @@ public class MainActivity extends AppCompatActivity
                 categories.add(new Categories(buildCategory.nameById(rootCategIdd.get(i)), /*builder.toString()*/
                         buildCategory.imgById(rootCategIdd.get(i))));
                 categoriesAdapter.notifyDataSetChanged();
-                lvMain.deferNotifyDataSetChanged();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                    lvMain.deferNotifyDataSetChanged();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -312,7 +319,9 @@ public class MainActivity extends AppCompatActivity
                         buildCategory.imgById(prevCategoryBuffer.get(i))));
 //                    Log.d("OK", "SELECTEDID: " + rootCategIdd.get(i));
                 categoriesAdapter.notifyDataSetChanged();
-                lvMain.deferNotifyDataSetChanged();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                    lvMain.deferNotifyDataSetChanged();
+                }
 //                rootCategIdd.add(prevCategoryBuffer.get(i));
             }
         }
@@ -363,7 +372,9 @@ public class MainActivity extends AppCompatActivity
                         buildCategory.imgById(categoryBuffer.get(i))));
 //                    Log.d("OK", "SELECTEDID: " + rootCategIdd.get(i));
                 categoriesAdapter.notifyDataSetChanged();
-                lvMain.deferNotifyDataSetChanged();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                    lvMain.deferNotifyDataSetChanged();
+                }
                 rootCategIdd.add(categoryBuffer.get(i));
             }
         }
@@ -464,7 +475,9 @@ public class MainActivity extends AppCompatActivity
 //                    Log.d("OK", "rootCategIdd.toString(): " + rootCategIdd.toString());
                 categories.clear();
                 categoriesAdapter.notifyDataSetChanged();
-                lvMain.deferNotifyDataSetChanged();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                    lvMain.deferNotifyDataSetChanged();
+                }
                 firstCall();
             /*for(int i=0; i<prevCategID.size();i++){
                 String prevId = prevCategID.get(prevCategID.size()-1);
@@ -509,7 +522,15 @@ public class MainActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.main, menu);
         SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
-        SearchView search = (SearchView) menu.findItem(R.id.search).getActionView();
+//        SearchView search = (SearchView) menu.findItem(R.id.search).getActionView();
+        SearchView search = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+            search = (SearchView) menu.findItem(R.id.search).getActionView();
+        }else {
+            MenuItem searchItem = menu.findItem(R.id.search);
+            search = (SearchView) MenuItemCompat.getActionView(searchItem);
+        }
+
         search.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
@@ -608,7 +629,9 @@ public class MainActivity extends AppCompatActivity
                 rootCategIdd = buildCategory.rootCategId;
                 categories.clear();
                 categoriesAdapter.notifyDataSetChanged();
-                lvMain.deferNotifyDataSetChanged();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                    lvMain.deferNotifyDataSetChanged();
+                }
                 firstCall();
             }
         } else if (id == R.id.nav_favourite) {
