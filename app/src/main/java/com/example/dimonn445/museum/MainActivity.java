@@ -27,6 +27,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity
     final String APP_PREFERENCES = "CATEGORIES";
     private SharedPreferences.Editor editor;
     private MyTask mt;
+    private ImageButton btn;
     //    Display display;
     private int width = 0, height = 0;
 
@@ -111,7 +113,6 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);*/
             }
         });
-
 
 //--------------------------------Fill Content end-------------------------------------
 
@@ -177,6 +178,19 @@ public class MainActivity extends AppCompatActivity
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        /*ImageButton btn = (ImageButton) findViewById(R.id.childImageButton);
+        ArrayList<String> iii = new ArrayList<String>();
+        Log.d("OK", "categoryBuffer: " + categoryBuffer.toString());
+        for (int i = 0; i < categoryBuffer.size(); i++) {
+            iii.add(buildCategory.subcategoryNext(categoryBuffer.get(i)).toString());
+        }
+        Log.d("OK", "III: " + iii.toString());
+        for (int i=0; i<iii.size();i++){
+            if (iii.get(i).equals("[NULL]")) {
+                btn.setVisibility(View.INVISIBLE);
+            }
+        }*/
     }
 
     @Override
@@ -274,7 +288,7 @@ public class MainActivity extends AppCompatActivity
     private void FindViev() {
 //        test = (Button) findViewById(R.id.test_btn);
         lvMain = (ListView) findViewById(R.id.lwcategories);
-
+        btn = (ImageButton) findViewById(R.id.childImageButton);
     }
 
     private void firstCall() {
@@ -302,6 +316,12 @@ public class MainActivity extends AppCompatActivity
         } catch (Exception e) {
             e.printStackTrace();
         }
+        /*for (int i = 0; i < categoryBuffer.size(); i++) {
+            if (categoryBuffer.get(i).equals("null")) {
+                ImageButton btn = (ImageButton) findViewById(R.id.childImageButton);
+                btn.setVisibility(View.INVISIBLE);
+            }
+        }*/
     }
 
     private void prevCall(String parent) {
@@ -346,6 +366,7 @@ public class MainActivity extends AppCompatActivity
 //            Log.d("OK", "nextCAll()");
 //        Log.d("OK","rootCategIdd.get "+rootCategIdd.get(pos));
         categoryBuffer = buildCategory.subcategoryNext(rootCategIdd.get(pos));
+//        Log.d("OK", "categoryBuffer: " + categoryBuffer.toString());
         String selectedCat = rootCategIdd.get(pos);
 //        Log.d("OK", "SELECTEDID: " + selectedCat);
         prevCategID.add(selectedCat);
@@ -367,6 +388,12 @@ public class MainActivity extends AppCompatActivity
 //                intent.putExtra("Check", true);
                 startActivity(intent);
                 finish();
+                /*try {
+                    btn.setVisibility(View.INVISIBLE);
+                }catch (NullPointerException e){
+                    e.printStackTrace();
+                }*/
+
             } else {
                 categories.add(new Categories(buildCategory.nameById(categoryBuffer.get(i)),
                         buildCategory.imgById(categoryBuffer.get(i))));
@@ -378,6 +405,7 @@ public class MainActivity extends AppCompatActivity
                 rootCategIdd.add(categoryBuffer.get(i));
             }
         }
+
         /*} catch (Exception e) {
             e.printStackTrace();
         }*/
@@ -526,7 +554,7 @@ public class MainActivity extends AppCompatActivity
         SearchView search = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
             search = (SearchView) menu.findItem(R.id.search).getActionView();
-        }else {
+        } else {
             MenuItem searchItem = menu.findItem(R.id.search);
             search = (SearchView) MenuItemCompat.getActionView(searchItem);
         }

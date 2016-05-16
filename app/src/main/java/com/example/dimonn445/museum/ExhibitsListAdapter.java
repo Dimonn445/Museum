@@ -66,7 +66,7 @@ public class ExhibitsListAdapter extends BaseAdapter {
         ((TextView) view.findViewById(R.id.exhibitDate)).setText(p.date);
 //        ((ImageView) view.findViewById(R.id.icon)).setImageResource(p.image);
 //        ((ImageView) view.findViewById(R.id.icon));
-        Picasso.with(ctx).load(p.image).error(R.drawable.ic_report_problem_black_36dp)/*.resize(200, 200)*/.into(((ImageView) view.findViewById(R.id.icon)));
+        Picasso.with(ctx).load(p.image).error(R.drawable.ic_report_problem_black_36dp).placeholder(R.drawable.ic_loop_black_36dp)/*.resize(200, 200)*/.into(((ImageView) view.findViewById(R.id.icon)));
         /*CheckBox cbFav = (CheckBox)view.findViewById(R.id.checkBoxFavorite);
         cbFav.setOnCheckedChangeListener(myCheckChangList);
         cbFav.setTag(position);

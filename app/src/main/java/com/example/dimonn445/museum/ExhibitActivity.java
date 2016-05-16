@@ -184,12 +184,9 @@ public class ExhibitActivity extends AppCompatActivity
                 } else {
                     DeleteExhref();
                     checkFavourite.setText(getString(R.string.add_to_fav));
-
                 }
             }
         });
-
-
     }
 
     private void checkExhPref() {

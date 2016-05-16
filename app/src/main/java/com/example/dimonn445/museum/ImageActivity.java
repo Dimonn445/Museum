@@ -27,10 +27,6 @@ import com.squareup.picasso.Target;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- */
 public class ImageActivity extends AppCompatActivity {
 
     private ImageView mContentView;
@@ -99,6 +95,12 @@ public class ImageActivity extends AppCompatActivity {
 
     private void obp() {
         super.onBackPressed();
+    }
+
+    @Override
+    protected void onStop() {
+        mSlider.stopAutoCycle();
+        super.onStop();
     }
 
     /*public boolean onTouchEvent(MotionEvent touchevent) {
