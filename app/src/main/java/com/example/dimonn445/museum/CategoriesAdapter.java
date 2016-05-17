@@ -66,6 +66,7 @@ public class CategoriesAdapter extends BaseAdapter {
         return position;
     }
 
+
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view = convertView;
@@ -89,6 +90,12 @@ public class CategoriesAdapter extends BaseAdapter {
             }
         });
 
+        if (p.checkImgButon) {
+            btn.setVisibility(View.INVISIBLE);
+        }else {
+            btn.setVisibility(View.VISIBLE);
+        }
+
         tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,6 +108,10 @@ public class CategoriesAdapter extends BaseAdapter {
         return view;
     }
 
+    /*public long setVisability(int position) {
+        btn.setVisibility(View.INVISIBLE);
+        return position;
+    }*/
     // категория по позиции
     Categories getCategory(int position) {
         return ((Categories) getItem(position));

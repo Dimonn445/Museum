@@ -13,7 +13,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
@@ -103,7 +102,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
-//                Log.d("ok", "click pos: " + position);
+                Log.d("OK", "lvMain.setOnItemClickListener click pos: " + position);
                 try {
                     nextCall(position);
                 } catch (Exception e) {
@@ -181,14 +180,16 @@ public class MainActivity extends AppCompatActivity
 
         /*ImageButton btn = (ImageButton) findViewById(R.id.childImageButton);
         ArrayList<String> iii = new ArrayList<String>();
-        Log.d("OK", "categoryBuffer: " + categoryBuffer.toString());
+//        Log.d("OK", "categoryBuffer: " + categoryBuffer.toString());
         for (int i = 0; i < categoryBuffer.size(); i++) {
             iii.add(buildCategory.subcategoryNext(categoryBuffer.get(i)).toString());
         }
-        Log.d("OK", "III: " + iii.toString());
+//        Log.d("OK", "III: " + iii.toString());
         for (int i=0; i<iii.size();i++){
-            if (iii.get(i).equals("[NULL]")) {
+            Log.d("OK","iii.get("+i+"): "+ iii.get(i));
+            if (iii.get(i).equals("[null]")) {
                 btn.setVisibility(View.INVISIBLE);
+                categoriesAdapter.notifyDataSetChanged();
             }
         }*/
     }
@@ -288,7 +289,7 @@ public class MainActivity extends AppCompatActivity
     private void FindViev() {
 //        test = (Button) findViewById(R.id.test_btn);
         lvMain = (ListView) findViewById(R.id.lwcategories);
-        btn = (ImageButton) findViewById(R.id.childImageButton);
+//        btn = (ImageButton) findViewById(R.id.childImageButton);
     }
 
     private void firstCall() {
@@ -307,7 +308,7 @@ public class MainActivity extends AppCompatActivity
 //                String url = buildCategory.imgById(rootCategIdd.get(i));
 //                url.length();
                 categories.add(new Categories(buildCategory.nameById(rootCategIdd.get(i)), /*builder.toString()*/
-                        buildCategory.imgById(rootCategIdd.get(i))));
+                        buildCategory.imgById(rootCategIdd.get(i)), false));
                 categoriesAdapter.notifyDataSetChanged();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                     lvMain.deferNotifyDataSetChanged();
@@ -318,13 +319,13 @@ public class MainActivity extends AppCompatActivity
         }
         /*for (int i = 0; i < categoryBuffer.size(); i++) {
             if (categoryBuffer.get(i).equals("null")) {
-                ImageButton btn = (ImageButton) findViewById(R.id.childImageButton);
+//                ImageButton btn = (ImageButton) findViewById(R.id.childImageButton);
                 btn.setVisibility(View.INVISIBLE);
             }
         }*/
     }
 
-    private void prevCall(String parent) {
+    /*private void prevCall(String parent) {
         prevCategoryBuffer = buildCategory.subcategoryPrev(parent);
         setTitle(buildCategory.nameById(parent));
 //        rootCategIdd.clear();
@@ -345,7 +346,7 @@ public class MainActivity extends AppCompatActivity
 //                rootCategIdd.add(prevCategoryBuffer.get(i));
             }
         }
-    }
+    }*/
 
     private void newCall(int pos) {
 //        categoryBuffer = buildCategory.subcategoryNext(rootCategIdd.get(pos));
@@ -362,6 +363,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void nextCall(int pos) {
+        ArrayList<String> arrayListNotifyAdapterChangeVisible = new ArrayList<String>();
 //        try {
 //            Log.d("OK", "nextCAll()");
 //        Log.d("OK","rootCategIdd.get "+rootCategIdd.get(pos));
@@ -376,8 +378,13 @@ public class MainActivity extends AppCompatActivity
         setTitle(buildCategory.nameById(selectedCat));
         rootCategIdd.clear();
         categories.clear();
+
+
+
         for (int i = 0; i < categoryBuffer.size(); i++) {
+            arrayListNotifyAdapterChangeVisible.add(buildCategory.subcategoryNext(categoryBuffer.get(i)).toString());
 //            Log.d("OK", "categoryBuffer.get(i): " + categoryBuffer.get(i));
+//            Log.d("OK", "arrayListNotifyAdapterChangeVisible.get(" + i + "): " + arrayListNotifyAdapterChangeVisible.get(i));
             if (categoryBuffer.get(i).equals("null")) {
 //                Log.d("OK", "NULL");
 //                    Log.d("OK", "selectedCatId: " + selectedCat);
@@ -388,15 +395,14 @@ public class MainActivity extends AppCompatActivity
 //                intent.putExtra("Check", true);
                 startActivity(intent);
                 finish();
-                /*try {
-                    btn.setVisibility(View.INVISIBLE);
-                }catch (NullPointerException e){
-                    e.printStackTrace();
-                }*/
-
             } else {
-                categories.add(new Categories(buildCategory.nameById(categoryBuffer.get(i)),
-                        buildCategory.imgById(categoryBuffer.get(i))));
+                if (arrayListNotifyAdapterChangeVisible.get(i).equals("[null]")) {
+                    categories.add(new Categories(buildCategory.nameById(categoryBuffer.get(i)),
+                            buildCategory.imgById(categoryBuffer.get(i)), true));
+                } else {
+                    categories.add(new Categories(buildCategory.nameById(categoryBuffer.get(i)),
+                            buildCategory.imgById(categoryBuffer.get(i)), false));
+                }
 //                    Log.d("OK", "SELECTEDID: " + rootCategIdd.get(i));
                 categoriesAdapter.notifyDataSetChanged();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
