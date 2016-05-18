@@ -455,6 +455,7 @@ public class ExhibitsListActivity extends AppCompatActivity
             search = (SearchView) MenuItemCompat.getActionView(searchItem);
         }
 
+        search.setQueryHint(getString(R.string.search));
         search.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
