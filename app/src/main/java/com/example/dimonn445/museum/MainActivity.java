@@ -118,6 +118,14 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        lvHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Log.d("OK","HEADER CLICK");
+                reload();
+            }
+        });
+
 //--------------------------------Fill Content end-------------------------------------
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_main);
@@ -194,6 +202,7 @@ public class MainActivity extends AppCompatActivity
                 lvMain.removeHeaderView(lvHeader);
             } else {
                 Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
+                lvMain.removeHeaderView(lvHeader);
                 lvMain.addHeaderView(lvHeader);
             }
         } catch (Exception e) {
@@ -228,7 +237,9 @@ public class MainActivity extends AppCompatActivity
         if (isNetworkAvailable()) {
             newCall(position);
         } else {
-            Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
+            lvMain.removeHeaderView(lvHeader);
+            lvMain.addHeaderView(lvHeader);
         }
 
     }
@@ -271,7 +282,8 @@ public class MainActivity extends AppCompatActivity
             }
             firstCall();
         } else {
-            Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
+            lvMain.removeHeaderView(lvHeader);
             lvMain.addHeaderView(lvHeader);
         }
     }
@@ -350,6 +362,7 @@ public class MainActivity extends AppCompatActivity
             }
         } else {
             Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
+            lvMain.removeHeaderView(lvHeader);
             lvMain.addHeaderView(lvHeader);
         }
     }
@@ -407,7 +420,6 @@ public class MainActivity extends AppCompatActivity
         setTitle(buildCategory.nameById(selectedCat));
         rootCategIdd.clear();
         categories.clear();
-
 
         for (int i = 0; i < categoryBuffer.size(); i++) {
             arrayListNotifyAdapterChangeVisible.add(buildCategory.subcategoryNext(categoryBuffer.get(i)).toString());
@@ -556,7 +568,9 @@ public class MainActivity extends AppCompatActivity
             }
         } catch (NullPointerException | IndexOutOfBoundsException e) {
             e.printStackTrace();
-            Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.error_loading_items), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.error_loading_items), Toast.LENGTH_SHORT).show();
+            lvMain.removeHeaderView(lvHeader);
+            lvMain.addHeaderView(lvHeader);
         }
     }
 

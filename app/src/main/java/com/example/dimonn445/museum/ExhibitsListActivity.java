@@ -195,10 +195,11 @@ public class ExhibitsListActivity extends AppCompatActivity
                             loadingTask.execute();
                         }
                     }
-                } /*else {
+                } else {
 //                    Toast.makeText(this, ExhibitsListActivity.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
-//                    lvMain.addFooterView(lvHeaderErrconection);
-                }*/
+                    lvMain.removeFooterView(lvHeaderErrconection);
+                    lvMain.addFooterView(lvHeaderErrconection);
+                }
             }
         });
 
