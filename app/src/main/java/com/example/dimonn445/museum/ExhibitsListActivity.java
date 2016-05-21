@@ -60,7 +60,7 @@ public class ExhibitsListActivity extends AppCompatActivity
     private Boolean chek;
     private int MAX_COUNT;
     private int PAGES = 1;
-    private View footer;
+    private View footer, lvHeaderErrconection, lvHeaderEmptyCategory;
     private LoadMoreAsyncTask loadingTask;
     private String ALLdata = "", search_query;
     private boolean all_exh, fav_exh, search_data;
@@ -74,21 +74,21 @@ public class ExhibitsListActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 //        getStatus();
 
-            all_exh = getIntent().getBooleanExtra("all_exh", false);
-            fav_exh = getIntent().getBooleanExtra("fav_exh", false);
+        all_exh = getIntent().getBooleanExtra("all_exh", false);
+        fav_exh = getIntent().getBooleanExtra("fav_exh", false);
 //        chek = getIntent().getBooleanExtra("Check", false);
-            Log.d("OK", "fav_exh: " + fav_exh + " all_exh: " + all_exh + " search_data: " + search_data/*+ " chek: "+chek*/);
+        Log.d("OK", "fav_exh: " + fav_exh + " all_exh: " + all_exh + " search_data: " + search_data/*+ " chek: "+chek*/);
 
 //        chek = true;
-            if (fav_exh) {
-                catName = getIntent().getStringExtra("CatName");
-            }
+        if (fav_exh) {
+            catName = getIntent().getStringExtra("CatName");
+        }
 
 //        if (chek) {
-            catId = getIntent().getStringExtra("CatId");
-            Log.d("OK", "CatId after ExhAct: " + catId);
+        catId = getIntent().getStringExtra("CatId");
+        Log.d("OK", "CatId after ExhAct: " + catId);
 
-            catName = getIntent().getStringExtra("CatName");
+        catName = getIntent().getStringExtra("CatName");
 //        setTitle(catName);
 //            chek = false;
 //            Log.d("OK", "CatId: " + catId);
@@ -98,59 +98,76 @@ public class ExhibitsListActivity extends AppCompatActivity
 //        }
 //        search_data = false;
 //        catName = getIntent().getStringExtra("CatName");
-            search_data = getIntent().getBooleanExtra("search_data", false);
-            if (search_data) {
-                search_query = getIntent().getStringExtra("search_query");
-                all_exh = false;
-                fav_exh = false;
-            }
-            setTitle(catName);
-            //--------------------------------Fill Content start-------------------------------------
-        if (isNetworkAvailable()) {
-            fillData();
-        } else
-            Toast.makeText(this, this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
-        exhibitsListAdapter = new ExhibitsListAdapter(this, exhibits);
+        search_data = getIntent().getBooleanExtra("search_data", false);
+        if (search_data) {
+            search_query = getIntent().getStringExtra("search_query");
+            all_exh = false;
+            fav_exh = false;
+        }
+        setTitle(catName);
+        //--------------------------------Fill Content start-------------------------------------
 
+        exhibitsListAdapter = new ExhibitsListAdapter(this, exhibits);
+        lvHeaderErrconection = getLayoutInflater().inflate(R.layout.listview_header, null);
+        lvHeaderEmptyCategory = getLayoutInflater().inflate(R.layout.listview_header_empty_category, null);
         lvMain = (ListView) findViewById(R.id.lwexhibits);
         lvMain.setLongClickable(true);
         footer = getLayoutInflater().inflate(R.layout.listview_footer, null);
-        if (isNetworkAvailable())
+
+        if (isNetworkAvailable()) {
+            fillData();
+            lvMain.removeHeaderView(lvHeaderErrconection);
+        } else {
+            Toast.makeText(this, this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
+            lvMain.addHeaderView(lvHeaderErrconection);
+        }
+
+
+        if (isNetworkAvailable()) {
             lvMain.addFooterView(footer);
+            lvMain.removeHeaderView(lvHeaderErrconection);
+        } else {
+            lvMain.addHeaderView(lvHeaderErrconection);
+        }
         lvMain.setAdapter(exhibitsListAdapter);
         lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
+                try {
+                    buildExhibits = new ExhibitsListBuilder(ALLdata);
+                    Log.d("OK", "ALLdata: " + ALLdata);
+                    buildExhibits.getExhId();
+                    exhibitsId = buildExhibits.exhibitId;
 
-                buildExhibits = new ExhibitsListBuilder(ALLdata);
-                Log.d("OK", "ALLdata: " + ALLdata);
-                buildExhibits.getExhId();
-                exhibitsId = buildExhibits.exhibitId;
+                    Log.d("ok", "exhibitsId.toString(): " + exhibitsId.toString());
+                    Log.d("ok", "click pos: " + position);
+                    Log.d("ok", "exhibitsIdclick pos: " + exhibitsId.get(position));
+                    Log.d("OK", "" + buildExhibits.nameById(exhibitsId.get(position)));
 
-                Log.d("ok", "exhibitsId.toString(): " + exhibitsId.toString());
-                Log.d("ok", "click pos: " + position);
-                Log.d("ok", "exhibitsIdclick pos: " + exhibitsId.get(position));
-                Log.d("OK", "" + buildExhibits.nameById(exhibitsId.get(position)));
-
-                Intent intent = new Intent(ExhibitsListActivity.this, ExhibitActivity.class);
-                intent.putExtra("ExhId", exhibitsId.get(position));
-                if (all_exh)
-                    intent.putExtra("all_exhh", all_exh);
-                if (fav_exh)
-                    intent.putExtra("fav_exhh", fav_exh);
-                if (search_data) {
-                    intent.putExtra("search_data", true);
-                    intent.putExtra("search_query", search_query);
+                    Intent intent = new Intent(ExhibitsListActivity.this, ExhibitActivity.class);
+                    intent.putExtra("ExhId", exhibitsId.get(position));
+                    if (all_exh)
+                        intent.putExtra("all_exhh", all_exh);
+                    if (fav_exh)
+                        intent.putExtra("fav_exhh", fav_exh);
+                    if (search_data) {
+                        intent.putExtra("search_data", true);
+                        intent.putExtra("search_query", search_query);
+                    }
+                    intent.putExtra("CatName", catName);
+                    Log.d("OK", "catId before ExhibitActivity: " + catId);
+                    intent.putExtra("CatId", catId);
+                    intent.putExtra("ExhName", "" + buildExhibits.nameById(exhibitsId.get(position)));
+                    intent.putExtra("Check", true);
+                    startActivity(intent);
+                    finish();
+                } catch (NullPointerException | IndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                        /*Toast.makeText(this, this.getString(R.string.error_loading_items), Toast.LENGTH_SHORT).show();
+                        lvMain.addHeaderView(lvHeaderErrconection);*/
                 }
-                intent.putExtra("CatName", catName);
-                Log.d("OK", "catId before ExhibitActivity: " + catId);
-                intent.putExtra("CatId", catId);
-                intent.putExtra("ExhName", "" + buildExhibits.nameById(exhibitsId.get(position)));
-                intent.putExtra("Check", true);
-                startActivity(intent);
-                finish();
             }
 
         });
@@ -168,14 +185,20 @@ public class ExhibitsListActivity extends AppCompatActivity
                 Log.d("OK", "totalCount: " + totalItemCount);
                 Log.d("ok", "exhibitsId.size: " + exhibitsId.size());
 //                setTitle(catName + " (" + totalItemCount+")");
-                if (MAX_COUNT > totalItemCount) {
-                    if (totalItemCount >= 10 && loadMore &&
-                            loadingTask.getStatus() == AsyncTask.Status.FINISHED) {
-                        lvMain.addFooterView(footer);
-                        loadingTask = new LoadMoreAsyncTask();
-                        loadingTask.execute();
+                if (isNetworkAvailable()) {
+//                    lvMain.removeHeaderView(lvHeaderErrconection);
+                    if (MAX_COUNT > totalItemCount) {
+                        if (totalItemCount >= 10 && loadMore &&
+                                loadingTask.getStatus() == AsyncTask.Status.FINISHED) {
+                            lvMain.addFooterView(footer);
+                            loadingTask = new LoadMoreAsyncTask();
+                            loadingTask.execute();
+                        }
                     }
-                }
+                } /*else {
+//                    Toast.makeText(this, ExhibitsListActivity.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
+//                    lvMain.addFooterView(lvHeaderErrconection);
+                }*/
             }
         });
 
@@ -450,7 +473,7 @@ public class ExhibitsListActivity extends AppCompatActivity
         SearchView search = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
             search = (SearchView) menu.findItem(R.id.search).getActionView();
-        }else {
+        } else {
             MenuItem searchItem = menu.findItem(R.id.search);
             search = (SearchView) MenuItemCompat.getActionView(searchItem);
         }
@@ -633,7 +656,8 @@ public class ExhibitsListActivity extends AppCompatActivity
 //            try {
 
             if (data.isEmpty()) {
-                Toast.makeText(ExhibitsListActivity.this, getString(R.string.error_loading_items), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ExhibitsListActivity.this, getString(R.string.error_loading_items), Toast.LENGTH_SHORT).show();
+                lvMain.addHeaderView(lvHeaderEmptyCategory);
                 lvMain.removeFooterView(footer);
                 return;
             }
@@ -669,8 +693,10 @@ public class ExhibitsListActivity extends AppCompatActivity
                 Log.d("OK", "MAX_COUNT = 0");
                 if (search_data)
                     Toast.makeText(ExhibitsListActivity.this, getString(R.string.search_no_responce), Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(ExhibitsListActivity.this, getString(R.string.kategory_no_responce), Toast.LENGTH_SHORT).show();
+                else {
+//                    Toast.makeText(ExhibitsListActivity.this, getString(R.string.kategory_no_responce), Toast.LENGTH_SHORT).show();
+                    lvMain.addHeaderView(lvHeaderEmptyCategory);
+                }
                 /*exhibits.clear();
                 exhibitsListAdapter.notifyDataSetChanged();
                 lvMain.deferNotifyDataSetChanged();*/

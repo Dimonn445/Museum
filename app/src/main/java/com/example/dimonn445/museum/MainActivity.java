@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity
 
     //    private Button test;
     private JSONArray categoryArr;
-    private ArrayList<String> rootCategIdd;
+    private ArrayList<String> rootCategIdd = new ArrayList<String>();
     private ArrayList<String> categoryBuffer;
     private ArrayList<String> prevCategoryBuffer;
     private ArrayList<String> prevCategID;
@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity
     private ImageButton btn;
     //    Display display;
     private int width = 0, height = 0;
+    private View lvHeader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,11 +93,15 @@ public class MainActivity extends AppCompatActivity
         categoriesAdapter = new CategoriesAdapter(this, categories);
         categoriesAdapter.setCustomButtonListner(MainActivity.this);
         categoriesAdapter.setCustomTextListener(MainActivity.this);
-        lvMain.setAdapter(categoriesAdapter);
+        lvHeader= getLayoutInflater().inflate(R.layout.listview_header,null);
+                lvMain.setAdapter(categoriesAdapter);
         if (isNetworkAvailable()) {
             fillData();
-        } else
+            lvMain.removeHeaderView(lvHeader);
+        } else {
             Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
+            lvMain.addHeaderView(lvHeader);
+        }
 
         lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -122,34 +127,45 @@ public class MainActivity extends AppCompatActivity
 //                Toast.makeText(MainActivity.this, "Loading...", Toast.LENGTH_LONG).show();
                 /*Snackbar.make(view, getString(R.string.update_category_list), Snackbar.LENGTH_SHORT)
                         .setAction("Action", null).show();*/
-                if (buildCategory.parentById(rootCategIdd.get(0)).equals("null")) {
-                    openQuitDialog();
-                } else {
-                    String getAllCat;
-                    getAllCat = loadStatus();
-                    try {
-                        buildCategory = new CategoryBuilder(getAllCat, MainActivity.this);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    buildCategory.getCatId();
-                    try {
-                        if (rootCategIdd.isEmpty()) {
-                            rootCategIdd = buildCategory.rootCategId;
+                try {
+                    if (isNetworkAvailable() || rootCategIdd.isEmpty()) {
+                        lvMain.removeHeaderView(lvHeader);
+                        if (buildCategory.parentById(rootCategIdd.get(0)).equals("null")) {
+                            openQuitDialog();
                         } else {
-                            rootCategIdd.clear();
-                        }
-                    } catch (NullPointerException e) {
-                        e.printStackTrace();
-                    }
+                            String getAllCat;
+                            getAllCat = loadStatus();
+                            try {
+                                buildCategory = new CategoryBuilder(getAllCat, MainActivity.this);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            buildCategory.getCatId();
+                            try {
+                                if (rootCategIdd.isEmpty()) {
+                                    rootCategIdd = buildCategory.rootCategId;
+                                } else {
+                                    rootCategIdd.clear();
+                                }
+                            } catch (NullPointerException e) {
+                                e.printStackTrace();
+                            }
 
-                    rootCategIdd = buildCategory.rootCategId;
-                    categories.clear();
-                    categoriesAdapter.notifyDataSetChanged();
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                        lvMain.deferNotifyDataSetChanged();
+                            rootCategIdd = buildCategory.rootCategId;
+                            categories.clear();
+                            categoriesAdapter.notifyDataSetChanged();
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                                lvMain.deferNotifyDataSetChanged();
+                            }
+                            firstCall();
+                        }
+                    } else {
+                        Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
                     }
-                    firstCall();
+                } catch (NullPointerException | IndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                    Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.error_loading_items), Toast.LENGTH_SHORT).show();
+                    lvMain.addHeaderView(lvHeader);
                 }
             }
         });
@@ -173,7 +189,13 @@ public class MainActivity extends AppCompatActivity
                 Toast.LENGTH_SHORT).show();*/
 //        newCall(position);
         try {
-            nextCall(position);
+            if (isNetworkAvailable()) {
+                nextCall(position);
+                lvMain.removeHeaderView(lvHeader);
+            } else {
+                Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
+                lvMain.addHeaderView(lvHeader);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -203,12 +225,18 @@ public class MainActivity extends AppCompatActivity
         } catch (Exception e) {
             e.printStackTrace();
         }*/
-        newCall(position);
+        if (isNetworkAvailable()) {
+            newCall(position);
+        } else {
+            Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
+        }
+
     }
 //    --------------------------------Navigation Drawer end-------------------------------------
 
     private void reload() {
         if (isNetworkAvailable()) {
+            lvMain.removeHeaderView(lvHeader);
             String getAllCat = "";
             mt = new MyTask();
             mt.execute();
@@ -244,6 +272,7 @@ public class MainActivity extends AppCompatActivity
             firstCall();
         } else {
             Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
+            lvMain.addHeaderView(lvHeader);
         }
     }
 
@@ -293,36 +322,36 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void firstCall() {
-        try {
+        if (isNetworkAvailable()) {
+            try {
+                lvMain.removeHeaderView(lvHeader);
 //            Log.d("OK", "firstCall()");
 //        categories.clear();
 //        Log.d("OK", "size(): " + rootCategIdd.size());
-            for (int i = 0; i < rootCategIdd.size(); i++) {
+                for (int i = 0; i < rootCategIdd.size(); i++) {
 //            buildCategory.nameById(rootCategIdd.get(i));
 //            Log.d("nameById", buildCategory.nameById(rootCategIdd.get(i)));
-                Log.d("OK", "IMGBYID: " + buildCategory.imgById(rootCategIdd.get(i)));
+                    Log.d("OK", "IMGBYID: " + buildCategory.imgById(rootCategIdd.get(i)));
                 /*StringBuilder builder = new StringBuilder();
                 builder.append(buildCategory.imgById(rootCategIdd.get(i)));
                 builder.delete(builder.length() - 7, builder.length());
                 builder.append(".png");*/
 //                String url = buildCategory.imgById(rootCategIdd.get(i));
 //                url.length();
-                categories.add(new Categories(buildCategory.nameById(rootCategIdd.get(i)), /*builder.toString()*/
-                        buildCategory.imgById(rootCategIdd.get(i)), false));
-                categoriesAdapter.notifyDataSetChanged();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                    lvMain.deferNotifyDataSetChanged();
+                    categories.add(new Categories(buildCategory.nameById(rootCategIdd.get(i)), /*builder.toString()*/
+                            buildCategory.imgById(rootCategIdd.get(i)), false));
+                    categoriesAdapter.notifyDataSetChanged();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                        lvMain.deferNotifyDataSetChanged();
+                    }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else {
+            Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
+            lvMain.addHeaderView(lvHeader);
         }
-        /*for (int i = 0; i < categoryBuffer.size(); i++) {
-            if (categoryBuffer.get(i).equals("null")) {
-//                ImageButton btn = (ImageButton) findViewById(R.id.childImageButton);
-                btn.setVisibility(View.INVISIBLE);
-            }
-        }*/
     }
 
     /*private void prevCall(String parent) {
@@ -371,14 +400,13 @@ public class MainActivity extends AppCompatActivity
 //        Log.d("OK", "categoryBuffer: " + categoryBuffer.toString());
         String selectedCat = rootCategIdd.get(pos);
 //        Log.d("OK", "SELECTEDID: " + selectedCat);
-        prevCategID.add(selectedCat);
+//        prevCategID.add(selectedCat);
             /*for(int i=0;i<prevCategID.size();i++){
                 Log.d("OK","prevCategID: "+prevCategID.get(i));
             }*/
         setTitle(buildCategory.nameById(selectedCat));
         rootCategIdd.clear();
         categories.clear();
-
 
 
         for (int i = 0; i < categoryBuffer.size(); i++) {
@@ -481,38 +509,41 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            if (buildCategory.parentById(rootCategIdd.get(0)).equals("null")) {
-                openQuitDialog();
-            } else {
-                String getAllCat;
-                getAllCat = loadStatus();
-                try {
-                    buildCategory = new CategoryBuilder(getAllCat, MainActivity.this);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                buildCategory.getCatId();
-                try {
-                    if (rootCategIdd.isEmpty()) {
-                        rootCategIdd = buildCategory.rootCategId;
-                    } else {
-                        rootCategIdd.clear();
-                    }
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                }
+        try {
 
-                rootCategIdd = buildCategory.rootCategId;
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            } else {
+
+                if (buildCategory.parentById(rootCategIdd.get(0)).equals("null")) {
+                    openQuitDialog();
+                } else {
+                    String getAllCat;
+                    getAllCat = loadStatus();
+                    try {
+                        buildCategory = new CategoryBuilder(getAllCat, MainActivity.this);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    buildCategory.getCatId();
+                    try {
+                        if (rootCategIdd.isEmpty()) {
+                            rootCategIdd = buildCategory.rootCategId;
+                        } else {
+                            rootCategIdd.clear();
+                        }
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
+
+                    rootCategIdd = buildCategory.rootCategId;
 //                    Log.d("OK", "rootCategIdd.toString(): " + rootCategIdd.toString());
-                categories.clear();
-                categoriesAdapter.notifyDataSetChanged();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                    lvMain.deferNotifyDataSetChanged();
-                }
-                firstCall();
+                    categories.clear();
+                    categoriesAdapter.notifyDataSetChanged();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                        lvMain.deferNotifyDataSetChanged();
+                    }
+                    firstCall();
             /*for(int i=0; i<prevCategID.size();i++){
                 String prevId = prevCategID.get(prevCategID.size()-1);
                 Log.d("OK", "prevId: " + prevId);
@@ -521,7 +552,11 @@ public class MainActivity extends AppCompatActivity
             }*/
 //            prevCall();
 //            super.onBackPressed();
+                }
             }
+        } catch (NullPointerException | IndexOutOfBoundsException e) {
+            e.printStackTrace();
+            Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.error_loading_items), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -573,12 +608,16 @@ public class MainActivity extends AppCompatActivity
             public boolean onQueryTextSubmit(String query) {
                 // User pressed the search button
                 Log.d("OK", "TextSubmit");
-                Intent intent = new Intent(MainActivity.this, ExhibitsListActivity.class);
-                intent.putExtra("search_data", true);
-                intent.putExtra("CatName", getString(R.string.search));
-                intent.putExtra("search_query", query);
-                startActivity(intent);
-                finish();
+                if (isNetworkAvailable()) {
+                    Intent intent = new Intent(MainActivity.this, ExhibitsListActivity.class);
+                    intent.putExtra("search_data", true);
+                    intent.putExtra("CatName", getString(R.string.search));
+                    intent.putExtra("search_query", query);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
+                }
                 return false;
             }
 
@@ -636,56 +675,56 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-        if (id == R.id.nav_home) {
-            // Handle the camera action
-            if (buildCategory.parentById(rootCategIdd.get(0)).equals("null")) {
-                Toast.makeText(this, getString(R.string.you_are_at_home), Toast.LENGTH_LONG).show();
+        if (isNetworkAvailable()) {
+            if (id == R.id.nav_home) {
+                // Handle the camera action
+                if (buildCategory.parentById(rootCategIdd.get(0)).equals("null")) {
+                    Toast.makeText(this, getString(R.string.you_are_at_home), Toast.LENGTH_LONG).show();
 //                Log.d("OK","\"");
-            } else {
-                String getAllCat;
-                getAllCat = loadStatus();
-                try {
-                    buildCategory = new CategoryBuilder(getAllCat, MainActivity.this);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                buildCategory.getCatId();
-                try {
-                    if (rootCategIdd.isEmpty()) {
-                        rootCategIdd = buildCategory.rootCategId;
-                    } else {
-                        rootCategIdd.clear();
+                } else {
+                    String getAllCat;
+                    getAllCat = loadStatus();
+                    try {
+                        buildCategory = new CategoryBuilder(getAllCat, MainActivity.this);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                }
+                    buildCategory.getCatId();
+                    try {
+                        if (rootCategIdd.isEmpty()) {
+                            rootCategIdd = buildCategory.rootCategId;
+                        } else {
+                            rootCategIdd.clear();
+                        }
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
 
-                rootCategIdd = buildCategory.rootCategId;
-                categories.clear();
-                categoriesAdapter.notifyDataSetChanged();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                    lvMain.deferNotifyDataSetChanged();
+                    rootCategIdd = buildCategory.rootCategId;
+                    categories.clear();
+                    categoriesAdapter.notifyDataSetChanged();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                        lvMain.deferNotifyDataSetChanged();
+                    }
+                    firstCall();
                 }
-                firstCall();
-            }
-        } else if (id == R.id.nav_favourite) {
-            Intent intent = new Intent(MainActivity.this, ExhibitsListActivity.class);
-            intent.putExtra("fav_exh", true);
-            intent.putExtra("CatName", getString(R.string.fav));
-            startActivity(intent);
-            finish();
-        } else if (id == R.id.nav_all_exhibits) {
-            Intent intent = new Intent(MainActivity.this, ExhibitsListActivity.class);
-            intent.putExtra("all_exh", true);
-            intent.putExtra("CatName", getString(R.string.all_exhibits));
-            startActivity(intent);
-            finish();
+            } else if (id == R.id.nav_favourite) {
+                Intent intent = new Intent(MainActivity.this, ExhibitsListActivity.class);
+                intent.putExtra("fav_exh", true);
+                intent.putExtra("CatName", getString(R.string.fav));
+                startActivity(intent);
+                finish();
+            } else if (id == R.id.nav_all_exhibits) {
+                Intent intent = new Intent(MainActivity.this, ExhibitsListActivity.class);
+                intent.putExtra("all_exh", true);
+                intent.putExtra("CatName", getString(R.string.all_exhibits));
+                startActivity(intent);
+                finish();
 
-        } else if (id == R.id.nav_reload) {
-            reload();
-        } else if (id == R.id.nav_exit) {
-            openQuitDialog();
+            } else if (id == R.id.nav_reload) {
+                reload();
+            } /*else if (id == R.id.nav_exit) {
+                openQuitDialog();*/
 //            Log.d("OK", "EXIT");
 //            this.getSharedPreferences(APP_PREFERENCES, 0).edit().clear().apply();
 //            editor.remove(APP_PREFERENCES).commit();
@@ -696,10 +735,16 @@ public class MainActivity extends AppCompatActivity
 
 //        } else if (id == R.id.nav_send) {
 
+//            }
+        } else {
+            Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
         }
-
+        if (id == R.id.nav_exit) {
+            openQuitDialog();
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 
