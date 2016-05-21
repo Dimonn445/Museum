@@ -658,8 +658,10 @@ public class ExhibitsListActivity extends AppCompatActivity
 
             if (data.isEmpty()) {
 //                Toast.makeText(ExhibitsListActivity.this, getString(R.string.error_loading_items), Toast.LENGTH_SHORT).show();
-                lvMain.addHeaderView(lvHeaderEmptyCategory);
-                lvMain.removeFooterView(footer);
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+                    lvMain.addHeaderView(lvHeaderEmptyCategory);
+                    lvMain.removeFooterView(footer);
+                }
                 return;
             }
             /*} catch (NullPointerException e) {

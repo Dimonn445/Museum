@@ -93,8 +93,8 @@ public class MainActivity extends AppCompatActivity
         categoriesAdapter = new CategoriesAdapter(this, categories);
         categoriesAdapter.setCustomButtonListner(MainActivity.this);
         categoriesAdapter.setCustomTextListener(MainActivity.this);
-        lvHeader= getLayoutInflater().inflate(R.layout.listview_header,null);
-                lvMain.setAdapter(categoriesAdapter);
+        lvHeader = getLayoutInflater().inflate(R.layout.listview_header, null);
+        lvMain.setAdapter(categoriesAdapter);
         if (isNetworkAvailable()) {
             fillData();
             lvMain.removeHeaderView(lvHeader);
@@ -173,7 +173,9 @@ public class MainActivity extends AppCompatActivity
                 } catch (NullPointerException | IndexOutOfBoundsException e) {
                     e.printStackTrace();
                     Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.error_loading_items), Toast.LENGTH_SHORT).show();
-                    lvMain.addHeaderView(lvHeader);
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+                        lvMain.addHeaderView(lvHeader);
+                    }
                 }
             }
         });
@@ -569,8 +571,10 @@ public class MainActivity extends AppCompatActivity
         } catch (NullPointerException | IndexOutOfBoundsException e) {
             e.printStackTrace();
 //            Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.error_loading_items), Toast.LENGTH_SHORT).show();
-            lvMain.removeHeaderView(lvHeader);
-            lvMain.addHeaderView(lvHeader);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+                lvMain.removeHeaderView(lvHeader);
+                lvMain.addHeaderView(lvHeader);
+            }
         }
     }
 
