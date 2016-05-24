@@ -698,7 +698,11 @@ public class ExhibitsListActivity extends AppCompatActivity
                     Toast.makeText(ExhibitsListActivity.this, getString(R.string.search_no_responce), Toast.LENGTH_SHORT).show();
                 else {
 //                    Toast.makeText(ExhibitsListActivity.this, getString(R.string.kategory_no_responce), Toast.LENGTH_SHORT).show();
-                    lvMain.addHeaderView(lvHeaderEmptyCategory);
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+                        lvMain.addHeaderView(lvHeaderEmptyCategory);
+                    } else {
+                        Toast.makeText(ExhibitsListActivity.this, getString(R.string.kategory_no_responce), Toast.LENGTH_SHORT).show();
+                    }
                 }
                 /*exhibits.clear();
                 exhibitsListAdapter.notifyDataSetChanged();
