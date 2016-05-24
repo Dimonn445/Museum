@@ -33,6 +33,8 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -630,7 +632,11 @@ public class MainActivity extends AppCompatActivity
                     Intent intent = new Intent(MainActivity.this, ExhibitsListActivity.class);
                     intent.putExtra("search_data", true);
                     intent.putExtra("CatName", getString(R.string.search));
-                    intent.putExtra("search_query", query);
+                    try {
+                        intent.putExtra("search_query", URLEncoder.encode(query, "UTF-8"));
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
                     startActivity(intent);
                     finish();
                 } else {
@@ -696,35 +702,41 @@ public class MainActivity extends AppCompatActivity
         if (isNetworkAvailable()) {
             if (id == R.id.nav_home) {
                 // Handle the camera action
-                if (buildCategory.parentById(rootCategIdd.get(0)).equals("null")) {
-                    Toast.makeText(this, getString(R.string.you_are_at_home), Toast.LENGTH_LONG).show();
-//                Log.d("OK","\"");
-                } else {
-                    String getAllCat;
-                    getAllCat = loadStatus();
-                    try {
-                        buildCategory = new CategoryBuilder(getAllCat, MainActivity.this);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    buildCategory.getCatId();
-                    try {
-                        if (rootCategIdd.isEmpty()) {
-                            rootCategIdd = buildCategory.rootCategId;
-                        } else {
-                            rootCategIdd.clear();
-                        }
-                    } catch (NullPointerException e) {
-                        e.printStackTrace();
-                    }
+                try {
 
-                    rootCategIdd = buildCategory.rootCategId;
-                    categories.clear();
-                    categoriesAdapter.notifyDataSetChanged();
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                        lvMain.deferNotifyDataSetChanged();
+
+                    if (buildCategory.parentById(rootCategIdd.get(0)).equals("null")) {
+                        Toast.makeText(this, getString(R.string.you_are_at_home), Toast.LENGTH_LONG).show();
+//                Log.d("OK","\"");
+                    } else {
+                        String getAllCat;
+                        getAllCat = loadStatus();
+                        try {
+                            buildCategory = new CategoryBuilder(getAllCat, MainActivity.this);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        buildCategory.getCatId();
+                        try {
+                            if (rootCategIdd.isEmpty()) {
+                                rootCategIdd = buildCategory.rootCategId;
+                            } else {
+                                rootCategIdd.clear();
+                            }
+                        } catch (NullPointerException e) {
+                            e.printStackTrace();
+                        }
+
+                        rootCategIdd = buildCategory.rootCategId;
+                        categories.clear();
+                        categoriesAdapter.notifyDataSetChanged();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                            lvMain.deferNotifyDataSetChanged();
+                        }
+                        firstCall();
                     }
-                    firstCall();
+                } catch (IndexOutOfBoundsException e) {
+                    e.printStackTrace();
                 }
             } else if (id == R.id.nav_favourite) {
                 Intent intent = new Intent(MainActivity.this, ExhibitsListActivity.class);

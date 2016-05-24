@@ -42,6 +42,8 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 public class ExhibitsListActivity extends AppCompatActivity
@@ -488,7 +490,11 @@ public class ExhibitsListActivity extends AppCompatActivity
                 // User pressed the search button
                 Log.d("OK", "TextSubmit");
                 search_data = true;
-                search_query = query;
+                try {
+                    search_query = URLEncoder.encode(query,"UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
                 /*LoadMoreAsyncTask loadTask = new LoadMoreAsyncTask();
                 loadTask.execute();*/
                 exhibits.clear();

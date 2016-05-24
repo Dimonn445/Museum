@@ -6,11 +6,11 @@
     android:weightSum="1">
 
     <ImageView
-        android:layout_width="61dp"
-        android:layout_height="wrap_content"
+        android:layout_width="253dp"
+        android:layout_height="213dp"
         android:id="@+id/imageView2"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/ic_sentiment_very_satisfied_black_36dp" />
+        android:src="@drawable/ololo" />
 
     <TextView
         android:id="@+id/header_text"
