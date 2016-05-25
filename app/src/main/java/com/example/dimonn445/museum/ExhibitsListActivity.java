@@ -53,7 +53,10 @@ public class ExhibitsListActivity extends AppCompatActivity
 
     private ArrayList<ExhibitsList> exhibits = new ArrayList<ExhibitsList>();
     private ExhibitsListAdapter exhibitsListAdapter;
-    private String catId, catName, saveNav;
+    private String catId;
+    private String catName;
+    private String saveNav, prevCategID;
+    private int POS;
     private ExhibitsListBuilder buildExhibits;
     private ArrayList<String> exhibitsId = new ArrayList<String>();
     private ListView lvMain;
@@ -79,8 +82,8 @@ public class ExhibitsListActivity extends AppCompatActivity
 
         all_exh = getIntent().getBooleanExtra("all_exh", false);
         fav_exh = getIntent().getBooleanExtra("fav_exh", false);
-//        chek = getIntent().getBooleanExtra("Check", false);
-        Log.d("OK", "fav_exh: " + fav_exh + " all_exh: " + all_exh + " search_data: " + search_data /*+ " chek: " + chek*/);
+        chek = getIntent().getBooleanExtra("Check", false);
+        Log.d("OK", "fav_exh: " + fav_exh + " all_exh: " + all_exh + " search_data: " + search_data + " chek: " + chek);
 
 //        chek = true;
         if (fav_exh) {
@@ -88,14 +91,25 @@ public class ExhibitsListActivity extends AppCompatActivity
         }
 //        ArrayList<String> saveNav;
 
-        /*if (chek) {
+        if (chek) {
 //            saveNav = getIntent().getExtras().getStringArrayList("SaveNav");
-            saveNav = getIntent().getStringExtra("SaveNav");
-            saveNav = saveNav.substring(1, saveNav.length());
+            prevCategID = getIntent().getStringExtra("prevCategID");
+            Log.d("OK", "prevCategID_____ " + prevCategID);
+            if (prevCategID.equals("[]"))
+                chek = false;
+//            saveNav = getIntent().getStringExtra("SaveNav");
+//            POS = getIntent().getIntExtra("POS", 0);
+            if (chek) {
+                prevCategID = prevCategID.substring(1, prevCategID.length());
+                prevCategID = prevCategID.substring(0, prevCategID.length() - 1);
+                prevCategID = removeChar(prevCategID, ',').trim();
+            }
+            /*saveNav = saveNav.substring(1, saveNav.length());
             saveNav = saveNav.substring(0, saveNav.length() - 1);
             saveNav = removeChar(saveNav, ',').trim();
-            Log.d("OK", "SaveNav " + saveNav);
-        }*/
+            Log.d("OK", "SaveNav " + saveNav);*/
+            Log.d("OK", "prevCategID_ELA " + prevCategID);
+        }
 //        if (chek) {
         catId = getIntent().getStringExtra("CatId");
         Log.d("OK", "CatId after ExhAct: " + catId);
@@ -256,7 +270,6 @@ public class ExhibitsListActivity extends AppCompatActivity
         //--------------------------------Navigation Drawer start-------------------------------------
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_exh_list);
-        assert fab != null;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -265,8 +278,13 @@ public class ExhibitsListActivity extends AppCompatActivity
                 Log.d("ok", "fab click");
 //                getSharedPreferences(APP_PREFERENCES, 0).edit().clear().apply();
                 Intent intent = new Intent(ExhibitsListActivity.this, MainActivity.class);
-                /*intent.putExtra("Check", true);
-                intent.putExtra("SaveNav", saveNav);*/
+                if (chek) {
+                    intent.putExtra("Check", true);
+                    intent.putExtra("prevCategID", prevCategID);
+                }
+//                intent.putExtra("SaveNav", saveNav);
+//            intent.putExtra("POS", POS);
+//                intent.putExtra("POSS", catId);
                 startActivity(intent);
                 finish();
             }
@@ -449,8 +467,13 @@ public class ExhibitsListActivity extends AppCompatActivity
 //            super.onBackPressed();
 //            getSharedPreferences(APP_PREFERENCES, 0).edit().clear().apply();
             Intent intent = new Intent(ExhibitsListActivity.this, MainActivity.class);
-            /*intent.putExtra("Check", true);
-            intent.putExtra("SaveNav", saveNav);*/
+            if (chek) {
+                intent.putExtra("Check", true);
+                intent.putExtra("prevCategID", prevCategID);
+            }
+//            intent.putExtra("SaveNav", saveNav);
+//            intent.putExtra("POS", POS);
+//            intent.putExtra("POSS", catId);
             startActivity(intent);
             finish();
         }

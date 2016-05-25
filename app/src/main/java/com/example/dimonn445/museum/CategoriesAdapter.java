@@ -92,8 +92,12 @@ public class CategoriesAdapter extends BaseAdapter {
 
         if (p.checkImgButon) {
             btn.setVisibility(View.INVISIBLE);
+//            btn.setClickable(false);
+//            btn.setFocusable(false);
         }else {
             btn.setVisibility(View.VISIBLE);
+//            btn.setClickable(true);
+//            btn.setEnabled(true);
         }
 
         tv.setOnClickListener(new View.OnClickListener() {
