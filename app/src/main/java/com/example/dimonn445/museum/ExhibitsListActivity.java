@@ -45,6 +45,7 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ExhibitsListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -52,7 +53,7 @@ public class ExhibitsListActivity extends AppCompatActivity
 
     private ArrayList<ExhibitsList> exhibits = new ArrayList<ExhibitsList>();
     private ExhibitsListAdapter exhibitsListAdapter;
-    private String catId, catName;
+    private String catId, catName, saveNav;
     private ExhibitsListBuilder buildExhibits;
     private ArrayList<String> exhibitsId = new ArrayList<String>();
     private ListView lvMain;
@@ -79,13 +80,22 @@ public class ExhibitsListActivity extends AppCompatActivity
         all_exh = getIntent().getBooleanExtra("all_exh", false);
         fav_exh = getIntent().getBooleanExtra("fav_exh", false);
 //        chek = getIntent().getBooleanExtra("Check", false);
-        Log.d("OK", "fav_exh: " + fav_exh + " all_exh: " + all_exh + " search_data: " + search_data/*+ " chek: "+chek*/);
+        Log.d("OK", "fav_exh: " + fav_exh + " all_exh: " + all_exh + " search_data: " + search_data /*+ " chek: " + chek*/);
 
 //        chek = true;
         if (fav_exh) {
             catName = getIntent().getStringExtra("CatName");
         }
+//        ArrayList<String> saveNav;
 
+        /*if (chek) {
+//            saveNav = getIntent().getExtras().getStringArrayList("SaveNav");
+            saveNav = getIntent().getStringExtra("SaveNav");
+            saveNav = saveNav.substring(1, saveNav.length());
+            saveNav = saveNav.substring(0, saveNav.length() - 1);
+            saveNav = removeChar(saveNav, ',').trim();
+            Log.d("OK", "SaveNav " + saveNav);
+        }*/
 //        if (chek) {
         catId = getIntent().getStringExtra("CatId");
         Log.d("OK", "CatId after ExhAct: " + catId);
@@ -246,6 +256,7 @@ public class ExhibitsListActivity extends AppCompatActivity
         //--------------------------------Navigation Drawer start-------------------------------------
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_exh_list);
+        assert fab != null;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -254,6 +265,8 @@ public class ExhibitsListActivity extends AppCompatActivity
                 Log.d("ok", "fab click");
 //                getSharedPreferences(APP_PREFERENCES, 0).edit().clear().apply();
                 Intent intent = new Intent(ExhibitsListActivity.this, MainActivity.class);
+                /*intent.putExtra("Check", true);
+                intent.putExtra("SaveNav", saveNav);*/
                 startActivity(intent);
                 finish();
             }
@@ -313,6 +326,14 @@ public class ExhibitsListActivity extends AppCompatActivity
                 }
             }
         }
+    }
+
+    public static String removeChar(String s, char c) {
+        String r = "";
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) != c) r += s.charAt(i);
+        }
+        return r;
     }
 
     private void fillData() {
@@ -428,6 +449,8 @@ public class ExhibitsListActivity extends AppCompatActivity
 //            super.onBackPressed();
 //            getSharedPreferences(APP_PREFERENCES, 0).edit().clear().apply();
             Intent intent = new Intent(ExhibitsListActivity.this, MainActivity.class);
+            /*intent.putExtra("Check", true);
+            intent.putExtra("SaveNav", saveNav);*/
             startActivity(intent);
             finish();
         }
@@ -491,7 +514,7 @@ public class ExhibitsListActivity extends AppCompatActivity
                 Log.d("OK", "TextSubmit");
                 search_data = true;
                 try {
-                    search_query = URLEncoder.encode(query,"UTF-8");
+                    search_query = URLEncoder.encode(query, "UTF-8");
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }

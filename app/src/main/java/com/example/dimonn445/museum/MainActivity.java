@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity
     //    private Button test;
     private JSONArray categoryArr;
     private ArrayList<String> rootCategIdd = new ArrayList<String>();
+    private ArrayList<String> SELECTEDcat = new ArrayList<String>();
+    private ArrayList<String> rootCategIddSave = new ArrayList<String>();
     private ArrayList<String> categoryBuffer;
     private ArrayList<String> prevCategoryBuffer;
     private ArrayList<String> prevCategID;
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity
     private ArrayList<Categories> categories = new ArrayList<Categories>();
     private CategoriesAdapter categoriesAdapter;
     private ListView lvMain;
-    private Boolean chek;
+    private Boolean chek, chek1;
     private SharedPreferences sPref;
     final String APP_PREFERENCES = "CATEGORIES";
     private SharedPreferences.Editor editor;
@@ -61,6 +63,7 @@ public class MainActivity extends AppCompatActivity
     //    Display display;
     private int width = 0, height = 0;
     private View lvHeader;
+    private String saveNav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +75,18 @@ public class MainActivity extends AppCompatActivity
             MainActivity.this.getSharedPreferences(APP_PREFERENCES, 0).edit().clear().apply();
             finish();
         }
-
+        /*chek1 = getIntent().getBooleanExtra("Check", false);
+        if (chek1) {
+            saveNav = getIntent().getStringExtra("SaveNav");
+            Log.d("OK", "SaveNavMA " + saveNav);
+            ArrayList<String> sss = new ArrayList<String>();
+            String ss[] = saveNav.split(" ");
+            for (int i = 0; i < ss.length; i++) {
+                sss.add(ss[i]);
+            }
+            Log.d("OK", "SSS " + sss.toString());
+            rootCategIddSave = sss;
+        }*/
         FindViev();
         getStatus();
 //        chek= false;
@@ -131,13 +145,14 @@ public class MainActivity extends AppCompatActivity
 //--------------------------------Fill Content end-------------------------------------
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_main);
+        assert fab != null;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                Toast.makeText(MainActivity.this, "Loading...", Toast.LENGTH_LONG).show();
                 /*Snackbar.make(view, getString(R.string.update_category_list), Snackbar.LENGTH_SHORT)
                         .setAction("Action", null).show();*/
-                try {
+                /*try {
                     if (isNetworkAvailable() || rootCategIdd.isEmpty()) {
                         lvMain.removeHeaderView(lvHeader);
                         if (buildCategory.parentById(rootCategIdd.get(0)).equals("null")) {
@@ -178,7 +193,42 @@ public class MainActivity extends AppCompatActivity
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
                         lvMain.addHeaderView(lvHeader);
                     }
+                }*/
+                Log.d("OK", "prevCategID.toString(): " + prevCategID.toString());
+                Log.d("OK", "prevCategID.size(): " + prevCategID.size());
+                if (prevCategID.size() != 1 && prevCategID.size() != 0) {
+                    prevCall(prevCategID.get(prevCategID.size() - 2));
+                    prevCategID.remove(prevCategID.size() - 1);
+                } else {
+//                    prevCall(prevCategID.get(prevCategID.size() - 1));
+                    String getAllCat;
+                    getAllCat = loadStatus();
+                    try {
+                        buildCategory = new CategoryBuilder(getAllCat, MainActivity.this);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    buildCategory.getCatId();
+                    try {
+                        if (rootCategIdd.isEmpty()) {
+                            rootCategIdd = buildCategory.rootCategId;
+                        } else {
+                            rootCategIdd.clear();
+                        }
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
+
+                    rootCategIdd = buildCategory.rootCategId;
+                    categories.clear();
+                    categoriesAdapter.notifyDataSetChanged();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                        lvMain.deferNotifyDataSetChanged();
+                    }
+                    firstCall();
+                    prevCategID.clear();
                 }
+
             }
         });
 
@@ -324,7 +374,13 @@ public class MainActivity extends AppCompatActivity
                 buildCategory = new CategoryBuilder(getAllCat, MainActivity.this);
             }
             buildCategory.getCatId();
-            rootCategIdd = buildCategory.rootCategId;
+            /*if (chek1) {
+                rootCategIdd = rootCategIddSave;
+                chek1 = false;
+            } else {*/
+                rootCategIdd = buildCategory.rootCategId;
+//            }
+            Log.d("OK", "rootCategIdd FIRSTCALL: " + rootCategIdd);
             firstCall();
         } catch (JSONException e) {
             e.printStackTrace();
@@ -354,8 +410,14 @@ public class MainActivity extends AppCompatActivity
                 builder.append(".png");*/
 //                String url = buildCategory.imgById(rootCategIdd.get(i));
 //                url.length();
+                    /*if(chek1){
+                        categories.add(new Categories(buildCategory.nameById(rootCategIddSave.get(i)), *//*builder.toString()*//*
+                                buildCategory.imgById(rootCategIddSave.get(i)), false));
+                        chek1= false;
+                    }else{*/
                     categories.add(new Categories(buildCategory.nameById(rootCategIdd.get(i)), /*builder.toString()*/
                             buildCategory.imgById(rootCategIdd.get(i)), false));
+//                    }
                     categoriesAdapter.notifyDataSetChanged();
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                         lvMain.deferNotifyDataSetChanged();
@@ -371,19 +433,52 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    /*private void prevCall(String parent) {
+    private void newCall(int pos) {
+//        categoryBuffer = buildCategory.subcategoryNext(rootCategIdd.get(pos));
+        String selectedCat = rootCategIdd.get(pos);
+//        Log.d("OK", "SELECTEDID: " + selectedCat);
+        rootCategIddSave = rootCategIdd;
+        Log.d("OK", "rootCategIddSave1 " + rootCategIddSave.toString());
+        String s = rootCategIddSave.toString();
+        rootCategIdd.clear();
+        Intent intent = new Intent(MainActivity.this, ExhibitsListActivity.class);
+        intent.putExtra("CatId", selectedCat);
+        intent.putExtra("CatName", "" + buildCategory.nameById(selectedCat));
+        /*intent.putExtra("Check", true);
+        intent.putExtra("SaveNav", s);*/
+//        intent.putExtra("Check", true);
+        startActivity(intent);
+        finish();
+
+    }
+
+    private void prevCall(String parent) {
+        ArrayList<String> arrayListNotifyAdapterChangeVisible = new ArrayList<String>();
         prevCategoryBuffer = buildCategory.subcategoryPrev(parent);
+        Log.d("OK", "prevCategoryBuffer: " + prevCategoryBuffer.toString());
+//        categoryBuffer = prevCategoryBuffer;
+        rootCategIdd = prevCategoryBuffer;
+
+//        rootCategIdd = rootCategIddPrev;
+//        Log.d("OK", "catBuff2: " + categoryBuffer.toString());
         setTitle(buildCategory.nameById(parent));
 //        rootCategIdd.clear();
         categories.clear();
         Log.d("OK", "parent: " + parent);
-
         if (parent.equals("null")) {
             Log.d("OK", "parent: " + parent);
         } else {
             for (int i = 0; i < prevCategoryBuffer.size(); i++) {
-                categories.add(new Categories(buildCategory.nameById(prevCategoryBuffer.get(i)),
-                        buildCategory.imgById(prevCategoryBuffer.get(i))));
+                arrayListNotifyAdapterChangeVisible.add(buildCategory.subcategoryNext(prevCategoryBuffer.get(i)).toString());
+                /*categories.add(new Categories(buildCategory.nameById(prevCategoryBuffer.get(i)),
+                        buildCategory.imgById(prevCategoryBuffer.get(i)), false));*/
+                if (arrayListNotifyAdapterChangeVisible.get(i).equals("[null]")) {
+                    categories.add(new Categories(buildCategory.nameById(prevCategoryBuffer.get(i)),
+                            buildCategory.imgById(prevCategoryBuffer.get(i)), true));
+                } else {
+                    categories.add(new Categories(buildCategory.nameById(prevCategoryBuffer.get(i)),
+                            buildCategory.imgById(prevCategoryBuffer.get(i)), false));
+                }
 //                    Log.d("OK", "SELECTEDID: " + rootCategIdd.get(i));
                 categoriesAdapter.notifyDataSetChanged();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
@@ -392,39 +487,27 @@ public class MainActivity extends AppCompatActivity
 //                rootCategIdd.add(prevCategoryBuffer.get(i));
             }
         }
-    }*/
-
-    private void newCall(int pos) {
-//        categoryBuffer = buildCategory.subcategoryNext(rootCategIdd.get(pos));
-        String selectedCat = rootCategIdd.get(pos);
-//        Log.d("OK", "SELECTEDID: " + selectedCat);
-        rootCategIdd.clear();
-        Intent intent = new Intent(MainActivity.this, ExhibitsListActivity.class);
-        intent.putExtra("CatId", selectedCat);
-        intent.putExtra("CatName", "" + buildCategory.nameById(selectedCat));
-//        intent.putExtra("Check", true);
-        startActivity(intent);
-        finish();
-
     }
 
     private void nextCall(int pos) {
         ArrayList<String> arrayListNotifyAdapterChangeVisible = new ArrayList<String>();
 //        try {
 //            Log.d("OK", "nextCAll()");
-//        Log.d("OK","rootCategIdd.get "+rootCategIdd.get(pos));
+        Log.d("OK", "rootCategIdd " + rootCategIdd.toString());
         categoryBuffer = buildCategory.subcategoryNext(rootCategIdd.get(pos));
-//        Log.d("OK", "categoryBuffer: " + categoryBuffer.toString());
+        Log.d("OK", "categoryBuffer: " + categoryBuffer.toString());
         String selectedCat = rootCategIdd.get(pos);
-//        Log.d("OK", "SELECTEDID: " + selectedCat);
-//        prevCategID.add(selectedCat);
+        Log.d("OK", "SELECTEDID: " + selectedCat);
+//        SELECTEDcat.add(selectedCat);
+        prevCategID.add(selectedCat);
             /*for(int i=0;i<prevCategID.size();i++){
                 Log.d("OK","prevCategID: "+prevCategID.get(i));
             }*/
         setTitle(buildCategory.nameById(selectedCat));
+        rootCategIddSave = rootCategIdd;
+        Log.d("OK", "rootCategIddSave2 " + rootCategIddSave.toString());
         rootCategIdd.clear();
         categories.clear();
-
         for (int i = 0; i < categoryBuffer.size(); i++) {
             arrayListNotifyAdapterChangeVisible.add(buildCategory.subcategoryNext(categoryBuffer.get(i)).toString());
 //            Log.d("OK", "categoryBuffer.get(i): " + categoryBuffer.get(i));
@@ -433,10 +516,13 @@ public class MainActivity extends AppCompatActivity
 //                Log.d("OK", "NULL");
 //                    Log.d("OK", "selectedCatId: " + selectedCat);
 //                    Log.d("OK", "selectedCatName: " + buildCategory.nameById(selectedCat));
+                String s = rootCategIddSave.toString();
                 Intent intent = new Intent(MainActivity.this, ExhibitsListActivity.class);
                 intent.putExtra("CatId", selectedCat);
                 intent.putExtra("CatName", "" + buildCategory.nameById(selectedCat));
-//                intent.putExtra("Check", true);
+                /*intent.putExtra("Check", true);
+                intent.putExtra("SaveNav", s);*/
+                Log.d("OK", "SaveNav1 " + rootCategIddSave.toString());
                 startActivity(intent);
                 finish();
             } else {
@@ -453,9 +539,11 @@ public class MainActivity extends AppCompatActivity
                     lvMain.deferNotifyDataSetChanged();
                 }
                 rootCategIdd.add(categoryBuffer.get(i));
+//                Log.d("OK","rootCategIdd"+rootCategIdd.toString());
             }
         }
-
+        Log.d("OK", "rootCategIddaferADD" + rootCategIdd.toString());
+//        rootCategIddPrev = rootCategIdd;
         /*} catch (Exception e) {
             e.printStackTrace();
         }*/
@@ -531,7 +619,7 @@ public class MainActivity extends AppCompatActivity
                 drawer.closeDrawer(GravityCompat.START);
             } else {
 
-                if (buildCategory.parentById(rootCategIdd.get(0)).equals("null")) {
+                /*if (buildCategory.parentById(rootCategIdd.get(0)).equals("null")) {
                     openQuitDialog();
                 } else {
                     String getAllCat;
@@ -560,14 +648,40 @@ public class MainActivity extends AppCompatActivity
                         lvMain.deferNotifyDataSetChanged();
                     }
                     firstCall();
-            /*for(int i=0; i<prevCategID.size();i++){
-                String prevId = prevCategID.get(prevCategID.size()-1);
-                Log.d("OK", "prevId: " + prevId);
-                prevCall(prevId);
-                prevCategID.remove(prevCategID.size()-1);
-            }*/
-//            prevCall();
-//            super.onBackPressed();
+                }*/
+                Log.d("OK", "prevCategID.toString(): " + prevCategID.toString());
+                Log.d("OK", "prevCategID.size(): " + prevCategID.size());
+                if (prevCategID.size() != 1 && prevCategID.size() != 0) {
+                    prevCall(prevCategID.get(prevCategID.size() - 2));
+                    prevCategID.remove(prevCategID.size() - 1);
+                } else {
+//                    prevCall(prevCategID.get(prevCategID.size() - 1));
+                    String getAllCat;
+                    getAllCat = loadStatus();
+                    try {
+                        buildCategory = new CategoryBuilder(getAllCat, MainActivity.this);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    buildCategory.getCatId();
+                    try {
+                        if (rootCategIdd.isEmpty()) {
+                            rootCategIdd = buildCategory.rootCategId;
+                        } else {
+                            rootCategIdd.clear();
+                        }
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
+
+                    rootCategIdd = buildCategory.rootCategId;
+                    categories.clear();
+                    categoriesAdapter.notifyDataSetChanged();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                        lvMain.deferNotifyDataSetChanged();
+                    }
+                    firstCall();
+                    prevCategID.clear();
                 }
             }
         } catch (NullPointerException | IndexOutOfBoundsException e) {
@@ -703,8 +817,6 @@ public class MainActivity extends AppCompatActivity
             if (id == R.id.nav_home) {
                 // Handle the camera action
                 try {
-
-
                     if (buildCategory.parentById(rootCategIdd.get(0)).equals("null")) {
                         Toast.makeText(this, getString(R.string.you_are_at_home), Toast.LENGTH_LONG).show();
 //                Log.d("OK","\"");

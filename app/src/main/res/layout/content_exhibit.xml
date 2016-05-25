@@ -76,8 +76,9 @@
         android:layout_below="@+id/exhibitDescription"
         android:text="exhibitCharacteristics"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_toLeftOf="@+id/exhibitReadMore"
-        android:layout_toStartOf="@+id/exhibitReadMore" />
+        android:layout_toStartOf="@+id/exhibitReadMore"
+        android:layout_alignRight="@+id/exhibitReadMore"
+        android:layout_alignEnd="@+id/exhibitReadMore" />
 
     <TextView
         android:id="@+id/exhibitUrls"
