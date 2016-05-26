@@ -1,4 +1,4 @@
-package com.example.dimonn445.museum;
+package com.kspu.dimonn445.museum;
 
 import org.junit.Test;
 

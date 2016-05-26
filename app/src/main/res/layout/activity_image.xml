@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
-    tools:context="com.example.dimonn445.museum.ImageActivity"
+    tools:context="com.kspu.dimonn445.museum.ImageActivity"
     android:id="@+id/frLay">
 
     <!--<ImageView
