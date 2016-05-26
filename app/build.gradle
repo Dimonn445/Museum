@@ -31,7 +31,7 @@ android {
         }
     }
     defaultConfig {
-        applicationId "com.example.dimonn445.museum"
+        applicationId "com.kspu.dimonn445.museum"
         minSdkVersion 9
         targetSdkVersion 23
         versionCode 1
