@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity
     private JSONArray categoryArr;
     private ArrayList<String> rootCategIdd = new ArrayList<String>();
     private ArrayList<String> SELECTEDcat = new ArrayList<String>();
-//    private ArrayList<String> rootCategIddSave = new ArrayList<String>();
+    //    private ArrayList<String> rootCategIddSave = new ArrayList<String>();
     private ArrayList<String> categoryBuffer = new ArrayList<String>();
     private ArrayList<String> prevCategoryBuffer;
     private ArrayList<String> prevCategID = new ArrayList<String>();
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity
         chek1 = getIntent().getBooleanExtra("Check", false);
 
         FindViev();
-        if(isNetworkAvailable()) {
+        if (isNetworkAvailable()) {
             getStatus();
         }
 //        chek= false;
@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity
                 lvMain.addHeaderView(lvHeader);
             }
         }
-        
+
         if (chek1) {
 //            categories.clear();
 //            saveNav = getIntent().getStringExtra("SaveNav");
@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity
 //            categories.clear();
             if (prevCategID.size() != 1 && prevCategID.size() != 0) {
                 prevCall(/*POSS*/prevCategID.get(prevCategID.size() - 1));
-            }else{
+            } else {
                 prevCall(/*POSS*/prevCategID.get(prevCategID.size() - 1));
             }
 //            prevCategID.remove(prevCategID.size() - 1);
@@ -233,49 +233,51 @@ public class MainActivity extends AppCompatActivity
                         lvMain.addHeaderView(lvHeader);
                     }
                 }*/
-                try{
-                Log.d("OK", "prevCategID.toString(): " + prevCategID.toString());
-                Log.d("OK", "prevCategID.size(): " + prevCategID.size());
-                if (prevCategID.size() != 1 && prevCategID.size() != 0) {
-                    prevCall(prevCategID.get(prevCategID.size() - 2));
-                    prevCategID.remove(prevCategID.size() - 1);
-                } else {
+                try {
+                    Log.d("OK", "prevCategID.toString(): " + prevCategID.toString());
+                    Log.d("OK", "prevCategID.size(): " + prevCategID.size());
+                    if (prevCategID.size() != 1 && prevCategID.size() != 0) {
+                        prevCall(prevCategID.get(prevCategID.size() - 2));
+                        prevCategID.remove(prevCategID.size() - 1);
+                    } else {
 //                    prevCall(prevCategID.get(prevCategID.size() - 1));
-                    String getAllCat;
-                    getAllCat = loadStatus();
-                    try {
-                        buildCategory = new CategoryBuilder(getAllCat, MainActivity.this);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    buildCategory.getCatId();
-                    try {
-                        if (rootCategIdd.isEmpty()) {
-                            rootCategIdd = buildCategory.rootCategId;
-                        } else {
-                            rootCategIdd.clear();
+                        String getAllCat;
+                        getAllCat = loadStatus();
+                        try {
+                            buildCategory = new CategoryBuilder(getAllCat, MainActivity.this);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                    } catch (NullPointerException e) {
-                        e.printStackTrace();
-                    }
+                        buildCategory.getCatId();
+                        try {
+                            if (rootCategIdd.isEmpty()) {
+                                rootCategIdd = buildCategory.rootCategId;
+                            } else {
+                                rootCategIdd.clear();
+                            }
+                        } catch (NullPointerException e) {
+                            e.printStackTrace();
+                        }
 
-                    rootCategIdd = buildCategory.rootCategId;
-                    categories.clear();
-                    categoriesAdapter.notifyDataSetChanged();
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                        lvMain.deferNotifyDataSetChanged();
+                        rootCategIdd = buildCategory.rootCategId;
+                        categories.clear();
+                        categoriesAdapter.notifyDataSetChanged();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                            lvMain.deferNotifyDataSetChanged();
+                        }
+                        firstCall();
+                        prevCategID.clear();
                     }
-                    firstCall();
-                    prevCategID.clear();
-                }
-            } catch (NullPointerException | IndexOutOfBoundsException e) {
-                e.printStackTrace();
+                } catch (NullPointerException | IndexOutOfBoundsException e) {
+                    e.printStackTrace();
 //            Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.error_loading_items), Toast.LENGTH_SHORT).show();
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    lvMain.removeHeaderView(lvHeader);
-                    lvMain.addHeaderView(lvHeader);
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        lvMain.removeHeaderView(lvHeader);
+                        lvMain.addHeaderView(lvHeader);
+                    } else {
+                        Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.error_loading_items), Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
 
             }
         });
@@ -385,8 +387,12 @@ public class MainActivity extends AppCompatActivity
             firstCall();
         } else {
 //            Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
-            lvMain.removeHeaderView(lvHeader);
-            lvMain.addHeaderView(lvHeader);
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                lvMain.removeHeaderView(lvHeader);
+                lvMain.addHeaderView(lvHeader);
+            }else{
+                Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
