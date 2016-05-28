@@ -68,10 +68,10 @@ public class ExhibitActivity extends AppCompatActivity
         height = this.getResources().getDisplayMetrics().heightPixels;
         getStatus();
 
-        all_exh = getIntent().getBooleanExtra("all_exhh",false);
-        fav_exh = getIntent().getBooleanExtra("fav_exhh",false);
-        search_data = getIntent().getBooleanExtra("search_data",false);
-        if(search_data){
+        all_exh = getIntent().getBooleanExtra("all_exhh", false);
+        fav_exh = getIntent().getBooleanExtra("fav_exhh", false);
+        search_data = getIntent().getBooleanExtra("search_data", false);
+        if (search_data) {
             search_query = getIntent().getStringExtra("search_query");
         }
         if (getIntent().getBooleanExtra("Check", false)) {
@@ -118,12 +118,12 @@ public class ExhibitActivity extends AppCompatActivity
 //            intent.putExtra("Check", false);
                 intent.putExtra("CatId", catId);
                 Log.d("OK", "CatId before ExhListAct+: " + catId);
-                if(all_exh)
+                if (all_exh)
                     intent.putExtra("all_exh", true);
-                if(fav_exh)
+                if (fav_exh)
                     intent.putExtra("fav_exh", true);
-                if(search_data){
-                    intent.putExtra("search_data",true);
+                if (search_data) {
+                    intent.putExtra("search_data", true);
                     intent.putExtra("search_query", search_query);
                 }
                 intent.putExtra("CatName", catName);
@@ -145,6 +145,7 @@ public class ExhibitActivity extends AppCompatActivity
         readMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                readMore.setBackgroundResource(R.color.colorAccent2);
                 Intent intent = new Intent(ExhibitActivity.this, DescriptionActivity.class);
                 intent.putExtra("artdescr", body);
                 intent.putExtra("ExhName", ExhName);
@@ -156,19 +157,15 @@ public class ExhibitActivity extends AppCompatActivity
             }
         });
 
-        exhibitdescription.setOnClickListener(new View.OnClickListener() {
+        /*exhibitdescription.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ExhibitActivity.this, DescriptionActivity.class);
                 intent.putExtra("artdescr", body);
                 intent.putExtra("ExhName", ExhName);
-//                intent.putExtra("ExhId", ExhId);
-//                Log.d("OK", "ExhId before DESCRACTI: "+ExhId);
-//                intent.putExtra("catId", catId);
                 startActivity(intent);
-//                finish();
             }
-        });
+        });*/
 
         checkFavourite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView,
@@ -183,6 +180,22 @@ public class ExhibitActivity extends AppCompatActivity
                 }
             }
         });
+    }
+
+    private void FindViev() {
+        exhibitname = (TextView) findViewById(R.id.exhibitName);
+        exhibitdescription = (TextView) findViewById(R.id.exhibitDescription);
+        exhibitCharacteristics = (TextView) findViewById(R.id.exhibitCharacteristics);
+        exhibiturl = (TextView) findViewById(R.id.exhibitUrls);
+        readMore = (TextView) findViewById(R.id.exhibitReadMore);
+
+        mSlider = (SliderLayout) findViewById(R.id.slider);
+        checkFavourite = (CheckBox) findViewById(R.id.checkBoxFav);
+        ViewGroup.LayoutParams params = mSlider.getLayoutParams();
+        if (height <= 800)
+            params.height = 200;
+//        Log.d("OK", "height: " + params.height);
+        mSlider.setLayoutParams(params);
     }
 
     private void checkExhPref() {
@@ -275,9 +288,9 @@ public class ExhibitActivity extends AppCompatActivity
                         return;
                     } else {
                         json = savedPref.substring(0, savedPref.length() - 2);
-                        if(dataJsonObj.getString("count").equals("0")){
+                        if (dataJsonObj.getString("count").equals("0")) {
                             json += "{\"_id\":\"" + exhId + "\",\"img\":{\"relativepath\":\"" + mainImg + "\",\"originalname\":\".jpg\"},\"title\":\"" + art_title + "\",\"dateStarted\":" + dateStarted + ",\"dateFinish\":" + dateFinish + ",\"bodyShort\":\"" + bodyShort + "\"}]}";
-                        }else {
+                        } else {
                             json += ",{\"_id\":\"" + exhId + "\",\"img\":{\"relativepath\":\"" + mainImg + "\",\"originalname\":\".jpg\"},\"title\":\"" + art_title + "\",\"dateStarted\":" + dateStarted + ",\"dateFinish\":" + dateFinish + ",\"bodyShort\":\"" + bodyShort + "\"}]}";
                         }
                         dataJsonObj = new JSONObject(json);
@@ -300,21 +313,6 @@ public class ExhibitActivity extends AppCompatActivity
 
     private static String replaceCharAt(String s, int pos, char c) {
         return s.substring(0, pos) + c + s.substring(pos + 1);
-    }
-
-    private void FindViev() {
-        exhibitname = (TextView) findViewById(R.id.exhibitName);
-        exhibitdescription = (TextView) findViewById(R.id.exhibitDescription);
-        exhibitCharacteristics = (TextView) findViewById(R.id.exhibitCharacteristics);
-        exhibiturl = (TextView) findViewById(R.id.exhibitUrls);
-        readMore = (TextView) findViewById(R.id.exhibitReadMore);
-        mSlider = (SliderLayout) findViewById(R.id.slider);
-        checkFavourite = (CheckBox) findViewById(R.id.checkBoxFav);
-        ViewGroup.LayoutParams params = mSlider.getLayoutParams();
-        if (height <= 800)
-            params.height = 200;
-//        Log.d("OK", "height: " + params.height);
-        mSlider.setLayoutParams(params);
     }
 
     private void FillData() {
@@ -366,11 +364,11 @@ public class ExhibitActivity extends AppCompatActivity
 //            Log.d("OK","crop_string: "+crop_string);
             exhId = exh.getId();
             body = exh.getBody();
-            if(body.isEmpty()||body.equals("null")){
+            if (body.isEmpty() || body.equals("null")) {
                 readMore.setVisibility(View.INVISIBLE);
                 exhibitdescription.setVisibility(View.INVISIBLE);
                 exhibitname.setText(ExhName);
-            }else {
+            } else {
                 exhibitname.setText(ExhName + " " + getString(R.string.brief_description));
             }
 //        readMore.setText("Читати далі...");
@@ -380,7 +378,7 @@ public class ExhibitActivity extends AppCompatActivity
             if (charackeristics.isEmpty()) {
                 exhibitCharacteristics.setText("");
             } else {
-                exhibitCharacteristics.setText("\n" + getString(R.string.characteristics) + "\n" + exh.getCharacteristics());
+                exhibitCharacteristics.setText("\n\n" + getString(R.string.characteristics) + "\n" + exh.getCharacteristics());
             }
             exh.getMediaCDN();
             exh.getMediaImg();
@@ -400,7 +398,7 @@ public class ExhibitActivity extends AppCompatActivity
             for (int i = 0; i < exh.mediaCdn.size(); i++) {
 //            Log.d("OK", "mediaCdn: " + exh.mediaCdn.get(i));
                 if (exh.mediaCdn.get(i).contains("null")) {
-                Log.d("OK", "mediaCdn contains null");
+                    Log.d("OK", "mediaCdn contains null");
                     builder.append("");
                 } else {
                     builder.append(exh.mediaCdn.get(i)).append("<br><br>");
@@ -486,7 +484,7 @@ public class ExhibitActivity extends AppCompatActivity
             mSlider.setDuration(6000);
 
 //--------------------------slider--------------------
-        }else {
+        } else {
             Toast.makeText(ExhibitActivity.this, ExhibitActivity.this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
             exhibitname.setVisibility(View.INVISIBLE);
             exhibitdescription.setVisibility(View.INVISIBLE);
@@ -559,12 +557,12 @@ public class ExhibitActivity extends AppCompatActivity
 //            intent.putExtra("Check", false);
             intent.putExtra("CatId", catId);
             Log.d("OK", "CatId before ExhListAct+: " + catId);
-            if(all_exh)
+            if (all_exh)
                 intent.putExtra("all_exh", true);
-            if(fav_exh)
+            if (fav_exh)
                 intent.putExtra("fav_exh", true);
-            if(search_data){
-                intent.putExtra("search_data",true);
+            if (search_data) {
+                intent.putExtra("search_data", true);
                 intent.putExtra("search_query", search_query);
             }
             intent.putExtra("CatName", catName);
@@ -678,6 +676,11 @@ public class ExhibitActivity extends AppCompatActivity
         super.onStop();
     }
 
+    @Override
+    protected void onResume() {
+        readMore.setBackgroundResource(R.color.colorAccent);
+        super.onResume();
+    }
 
     //--------------------------slider--------------------
 

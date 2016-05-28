@@ -59,13 +59,16 @@
         android:textAppearance="?android:attr/textAppearanceButton"
         android:text="@string/read_more"
         android:id="@+id/exhibitReadMore"
-        android:clickable="false"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="15dp"
+        android:clickable="true"
         android:layout_below="@+id/exhibitDescription"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:background="#FF4081"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:padding="10dp"
+        />
 
     <TextView
         android:id="@+id/exhibitCharacteristics"
@@ -78,7 +81,8 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_toStartOf="@+id/exhibitReadMore"
         android:layout_alignRight="@+id/exhibitReadMore"
-        android:layout_alignEnd="@+id/exhibitReadMore" />
+        android:layout_alignEnd="@+id/exhibitReadMore"
+        android:layout_marginBottom="20dp" />
 
     <TextView
         android:id="@+id/exhibitUrls"

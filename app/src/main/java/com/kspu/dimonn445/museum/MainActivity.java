@@ -80,7 +80,9 @@ public class MainActivity extends AppCompatActivity
         chek1 = getIntent().getBooleanExtra("Check", false);
 
         FindViev();
-        getStatus();
+        if(isNetworkAvailable()) {
+            getStatus();
+        }
 //        chek= false;
         /*View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
@@ -98,6 +100,7 @@ public class MainActivity extends AppCompatActivity
         test.setOnClickListener(onClickListener);*/
 //--------------------------------Fill Content start-------------------------------------
 
+
         categoriesAdapter = new CategoriesAdapter(this, categories);
         categoriesAdapter.setCustomButtonListner(MainActivity.this);
         categoriesAdapter.setCustomTextListener(MainActivity.this);
@@ -109,9 +112,13 @@ public class MainActivity extends AppCompatActivity
             lvMain.removeHeaderView(lvHeader);
         } else {
             Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
-            lvMain.addHeaderView(lvHeader);
+//            lvMain.addHeaderView(lvHeader);
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                lvMain.removeHeaderView(lvHeader);
+                lvMain.addHeaderView(lvHeader);
+            }
         }
-
+        
         if (chek1) {
 //            categories.clear();
 //            saveNav = getIntent().getStringExtra("SaveNav");
@@ -226,6 +233,7 @@ public class MainActivity extends AppCompatActivity
                         lvMain.addHeaderView(lvHeader);
                     }
                 }*/
+                try{
                 Log.d("OK", "prevCategID.toString(): " + prevCategID.toString());
                 Log.d("OK", "prevCategID.size(): " + prevCategID.size());
                 if (prevCategID.size() != 1 && prevCategID.size() != 0) {
@@ -260,6 +268,14 @@ public class MainActivity extends AppCompatActivity
                     firstCall();
                     prevCategID.clear();
                 }
+            } catch (NullPointerException | IndexOutOfBoundsException e) {
+                e.printStackTrace();
+//            Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.error_loading_items), Toast.LENGTH_SHORT).show();
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    lvMain.removeHeaderView(lvHeader);
+                    lvMain.addHeaderView(lvHeader);
+                }
+            }
 
             }
         });
@@ -664,7 +680,6 @@ public class MainActivity extends AppCompatActivity
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         try {
-
             if (drawer.isDrawerOpen(GravityCompat.START)) {
                 drawer.closeDrawer(GravityCompat.START);
             } else {
@@ -737,7 +752,7 @@ public class MainActivity extends AppCompatActivity
         } catch (NullPointerException | IndexOutOfBoundsException e) {
             e.printStackTrace();
 //            Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.error_loading_items), Toast.LENGTH_SHORT).show();
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
                 lvMain.removeHeaderView(lvHeader);
                 lvMain.addHeaderView(lvHeader);
             }
