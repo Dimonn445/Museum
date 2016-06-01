@@ -9,10 +9,10 @@
             android:id="@+id/nav_favourite"
             android:icon="@drawable/ic_favorite_black_48dp"
             android:title="@string/fav" />
-        <item
+        <!--<item
             android:id="@+id/nav_all_exhibits"
             android:icon="@drawable/ic_account_balance_black_48dp"
-            android:title="@string/all_exhibits" />
+            android:title="@string/all_exhibits" />-->
         <item
             android:id="@+id/nav_reload"
             android:icon="@drawable/ic_cached_black_48dp"
@@ -23,17 +23,17 @@
             android:title="@string/exit" />
     </group>
 
-    <!--<item android:title="Communicate">
+    <item android:title="@string/feedback">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:id="@+id/museum_site"
+                android:icon="@drawable/ic_link_black_48dp"
+                android:title="@string/museum_url" />
             <item
                 android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:icon="@drawable/ic_link_black_48dp"
+                android:title="@string/market_url" />
         </menu>
-    </item>-->
+    </item>
 
 </menu>

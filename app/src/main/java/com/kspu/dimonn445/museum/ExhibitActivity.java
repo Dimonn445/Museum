@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -378,7 +379,7 @@ public class ExhibitActivity extends AppCompatActivity
             if (charackeristics.isEmpty()) {
                 exhibitCharacteristics.setText("");
             } else {
-                exhibitCharacteristics.setText("\n\n" + getString(R.string.characteristics) + "\n" + exh.getCharacteristics());
+                exhibitCharacteristics.setText(Html.fromHtml("<br><br><br>" + "<font color=\"#66000000\">"+getString(R.string.characteristics)+"</font>" + "<br>" + charackeristics));
             }
             exh.getMediaCDN();
             exh.getMediaImg();
@@ -640,12 +641,12 @@ public class ExhibitActivity extends AppCompatActivity
             intent.putExtra("CatName", getString(R.string.fav));
             startActivity(intent);
             finish();
-        } else if (id == R.id.nav_all_exhibits) {
+        /*} else if (id == R.id.nav_all_exhibits) {
             Intent intent = new Intent(ExhibitActivity.this, ExhibitsListActivity.class);
             intent.putExtra("all_exh", true);
             intent.putExtra("CatName", getString(R.string.all_exhibits));
             startActivity(intent);
-            finish();
+            finish();*/
 
 //        } else if (id == R.id.nav_manage) {
 
@@ -661,6 +662,12 @@ public class ExhibitActivity extends AppCompatActivity
 
 //        } else if (id == R.id.nav_send) {
 
+        } else if (id == R.id.museum_site) {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://kspu-museum.in.ua/"));
+            startActivity(browserIntent);
+        } else if (id == R.id.nav_send) {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.kspu.dimonn445.museum&hl=ru"));
+            startActivity(browserIntent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

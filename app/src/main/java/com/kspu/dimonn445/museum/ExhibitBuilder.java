@@ -185,10 +185,12 @@ public class ExhibitBuilder {
                 JSONObject data = characteristics.getJSONObject(i);
                 name = data.getString("name");
                 value = data.getString("value");
-                builder.append(name)
+                builder.append("<font color=\"#66000000\">")
+                        .append(name)
                         .append(": ")
+                        .append("</font>")
                         .append(value)
-                        .append("\n");
+                        .append("<br>");
             }
         } catch (JSONException e) {
             e.printStackTrace();

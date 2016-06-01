@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -390,7 +391,7 @@ public class MainActivity extends AppCompatActivity
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 lvMain.removeHeaderView(lvHeader);
                 lvMain.addHeaderView(lvHeader);
-            }else{
+            } else {
                 Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
             }
         }
@@ -927,12 +928,12 @@ public class MainActivity extends AppCompatActivity
                 intent.putExtra("CatName", getString(R.string.fav));
                 startActivity(intent);
                 finish();
-            } else if (id == R.id.nav_all_exhibits) {
+            /*} else if (id == R.id.nav_all_exhibits) {
                 Intent intent = new Intent(MainActivity.this, ExhibitsListActivity.class);
                 intent.putExtra("all_exh", true);
                 intent.putExtra("CatName", getString(R.string.all_exhibits));
                 startActivity(intent);
-                finish();
+                finish();*/
 
             } else if (id == R.id.nav_reload) {
                 reload();
@@ -944,11 +945,13 @@ public class MainActivity extends AppCompatActivity
 //            editor.clear();
 //            finish();
 //            System.exit(0);
-//        }else if (id == R.id.nav_share) {
-
-//        } else if (id == R.id.nav_send) {
-
-//            }
+            else if (id == R.id.museum_site) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://kspu-museum.in.ua/"));
+                startActivity(browserIntent);
+            } else if (id == R.id.nav_send) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.kspu.dimonn445.museum&hl=ru"));
+                startActivity(browserIntent);
+            }
         } else {
             Toast.makeText(MainActivity.this, MainActivity.this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
         }

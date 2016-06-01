@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -596,12 +597,12 @@ public class ExhibitsListActivity extends AppCompatActivity
             intent.putExtra("CatName", getString(R.string.fav));
             startActivity(intent);
             finish();
-        } else if (id == R.id.nav_all_exhibits) {
+       /* } else if (id == R.id.nav_all_exhibits) {
             Intent intent = new Intent(ExhibitsListActivity.this, ExhibitsListActivity.class);
             intent.putExtra("all_exh", true);
             intent.putExtra("CatName", getString(R.string.all_exhibits));
             startActivity(intent);
-            finish();
+            finish();*/
             // } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_exit) {
@@ -613,12 +614,15 @@ public class ExhibitsListActivity extends AppCompatActivity
             intent.putExtra("Exit me", true);
             startActivity(intent);
             finish();*/
-            // }else if (id == R.id.nav_share) {
+            // }
 
-            // } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.museum_site) {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://kspu-museum.in.ua/"));
+            startActivity(browserIntent);
+        } else if (id == R.id.nav_send) {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.kspu.dimonn445.museum&hl=ru"));
+            startActivity(browserIntent);
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
