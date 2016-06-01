@@ -51,7 +51,7 @@ public class ExhibitBuilder {
 
     public String getBody() {
         try {
-            return exhArr.getString("body");
+            return exhArr.getString("body").replace('"', '”');
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -69,7 +69,7 @@ public class ExhibitBuilder {
 
     public String getExhTitle() {
         try {
-            return exhArr.getString("title");
+            return exhArr.getString("title").replace('"', '”');
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -78,7 +78,7 @@ public class ExhibitBuilder {
 
     public String getDateStarted() {
         try {
-            return exhArr.getString("dateStarted");
+            return exhArr.getString("dateStarted").replace('"', '”');
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -87,7 +87,7 @@ public class ExhibitBuilder {
 
     public String getDateFinish() {
         try {
-            return exhArr.getString("dateFinish");
+            return exhArr.getString("dateFinish").replace('"', '”');
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -97,7 +97,7 @@ public class ExhibitBuilder {
     public String getMainImgPref() {
         try {
             JSONObject data = exhArr.getJSONObject("img");
-//            Log.d("OK", "getMainImg(): " + data.getString("relativepath"));
+            Log.d("OK", "getMainImgPref(): " + data.getString("relativepath"));
             return data.getString("relativepath");
         } catch (JSONException e) {
             e.printStackTrace();
@@ -174,6 +174,33 @@ public class ExhibitBuilder {
             e.printStackTrace();
             imgCdn.add("null");
         }
+    }
+
+    public String returnMainImage(){
+        String imageCdn = "";
+        try {
+            JSONObject data = exhArr.getJSONObject("img");
+//            Log.d("OK", "getMainImg(): " + data.getString("relativepath"));
+            imageCdn = context.getString(R.string.BASE_API_URL) + data.getString("relativepath").concat(mainActivity.checkDisplResolution(context));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.d("OK","returnMainImage: "+imageCdn);
+        return imageCdn;
+    }
+
+    public String returnMainImageName(){
+        String imageCdn = "";
+        try {
+            JSONObject data = exhArr.getJSONObject("img");
+//            Log.d("OK", "getMainImg(): " + data.getString("relativepath"));
+            imageCdn = data.getString("relativepath").concat(mainActivity.checkDisplResolution(context));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        imageCdn = imageCdn.substring(imageCdn.lastIndexOf("/")+1,imageCdn.length());
+        Log.d("OK","MainImageName: "+imageCdn);
+        return imageCdn;
     }
 
     public String getCharacteristics() {

@@ -1,5 +1,6 @@
 package com.kspu.dimonn445.museum;
 
+import android.content.Context;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -15,8 +16,10 @@ public class ExhibitsListBuilder {
     private JSONArray exhibitsArr;
     public ArrayList<String> exhibitId;
     JSONObject dataJsonObj = null;
+    private MainActivity mainActivity;
+    private Context context;
 
-    ExhibitsListBuilder(String json) {
+    ExhibitsListBuilder(String json, Context c) {
         try {
             dataJsonObj = new JSONObject(json);
             exhibitsArr = dataJsonObj.getJSONArray("exhibits");
@@ -24,6 +27,8 @@ public class ExhibitsListBuilder {
             e.printStackTrace();
         }
         exhibitId = new ArrayList<String>();
+        mainActivity = new MainActivity();
+        context = c;
     }
 
     public void getExhId() {
@@ -125,6 +130,27 @@ public class ExhibitsListBuilder {
             e.printStackTrace();
         }
         return count;
+    }
+
+    public String mainImageNameByid(String id){
+        String imageCdn = "";
+        try {
+            for (int i = 0; i < exhibitsArr.length(); i++) {
+                JSONObject data = exhibitsArr.getJSONObject(i);
+                if (data.getString("_id").equals(id)) {
+                    JSONObject imageData = data.getJSONObject("img");
+                    imageCdn = imageData.getString("relativepath").concat(mainActivity.checkDisplResolution(context));
+                    Log.d("OK","imageCdnNNNNNNNNN: "+imageCdn);
+                    imageCdn = imageCdn.substring(imageCdn.lastIndexOf("/") + 1, imageCdn.length());
+                    Log.d("OK","MainImageName: "+imageCdn);
+                    return imageCdn;
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return "null";
+        }
+        return "null";
     }
 
 }

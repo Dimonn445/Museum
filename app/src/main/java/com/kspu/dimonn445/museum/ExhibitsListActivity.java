@@ -136,16 +136,20 @@ public class ExhibitsListActivity extends AppCompatActivity
             fillData();
             lvMain.removeHeaderView(lvHeaderErrconection);
         } else {
-            Toast.makeText(this, this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
-            lvMain.addHeaderView(lvHeaderErrconection);
+            if (!fav_exh) {
+                Toast.makeText(this, this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
+                lvMain.addHeaderView(lvHeaderErrconection);
+            } else {
+                fillData();
+            }
         }
-
-
         if (isNetworkAvailable()) {
             lvMain.addFooterView(footer);
             lvMain.removeHeaderView(lvHeaderErrconection);
         } else {
-            lvMain.addHeaderView(lvHeaderErrconection);
+            if (!fav_exh) {
+                lvMain.addHeaderView(lvHeaderErrconection);
+            }
         }
         lvMain.setAdapter(exhibitsListAdapter);
         lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -154,7 +158,7 @@ public class ExhibitsListActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
                 try {
-                    buildExhibits = new ExhibitsListBuilder(ALLdata);
+                    buildExhibits = new ExhibitsListBuilder(ALLdata, ExhibitsListActivity.this);
                     Log.d("OK", "ALLdata: " + ALLdata);
                     buildExhibits.getExhId();
                     exhibitsId = buildExhibits.exhibitId;
@@ -168,8 +172,14 @@ public class ExhibitsListActivity extends AppCompatActivity
                     intent.putExtra("ExhId", exhibitsId.get(position));
                     if (all_exh)
                         intent.putExtra("all_exhh", all_exh);
-                    if (fav_exh)
+                    if (fav_exh) {
                         intent.putExtra("fav_exhh", fav_exh);
+                        String body = buildExhibits.bodyShortById(exhibitsId.get(position));
+                        intent.putExtra("body_short", body);
+                        String img = buildExhibits.mainImageNameByid(exhibitsId.get(position));
+                        Log.d("OK", "IMAGEEEEEEEEEEEEEEEEEEEEE: " + img);
+                        intent.putExtra("img_fav_name", img);
+                    }
                     if (search_data) {
                         intent.putExtra("search_data", true);
                         intent.putExtra("search_query", search_query);
@@ -215,8 +225,10 @@ public class ExhibitsListActivity extends AppCompatActivity
                     }
                 } else {
 //                    Toast.makeText(this, ExhibitsListActivity.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
-                    lvMain.removeFooterView(lvHeaderErrconection);
-                    lvMain.addFooterView(lvHeaderErrconection);
+                    if (!fav_exh) {
+                        lvMain.removeFooterView(lvHeaderErrconection);
+                        lvMain.addFooterView(lvHeaderErrconection);
+                    }
                 }
             }
         });
@@ -236,6 +248,10 @@ public class ExhibitsListActivity extends AppCompatActivity
                                 public void onClick(DialogInterface dialog, int which) {
                                     // TODO Auto-generated method stub
                                     DeleteExhref(exhibitsId.get(position));
+                                    ImageSaver ims = new ImageSaver(ExhibitsListActivity.this);
+                                    ims.setFileName(buildExhibits.mainImageNameByid(exhibitsId.get(position)))
+                                            .setDirectoryName("exh_images")
+                                            .deleteFile();
                                     Intent intent = new Intent(ExhibitsListActivity.this,
                                             ExhibitsListActivity.class);
                                     intent.putExtra("fav_exh", true);
@@ -667,6 +683,7 @@ public class ExhibitsListActivity extends AppCompatActivity
                             Toast.makeText(ExhibitsListActivity.this, getString(R.string.error_loading_items), Toast.LENGTH_SHORT).show();
                         } else {
                             getAllExhibits = prefs.getExhPref();
+                            Log.d("OK", "getAllExhibits: " + getAllExhibits);
                         }
                     }
                 } else {
@@ -725,13 +742,13 @@ public class ExhibitsListActivity extends AppCompatActivity
                     builder.append(ALLdata.substring(0, ALLdata.length() - 2)).append(",").append(buff.substring(1, buff.length())).append("}");
                     ALLdata = builder.toString();
 //                    writeToFile(ALLdata);
-                    buildExhibits = new ExhibitsListBuilder(data);
+                    buildExhibits = new ExhibitsListBuilder(data, ExhibitsListActivity.this);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             } else {
-                buildExhibits = new ExhibitsListBuilder(data);
+                buildExhibits = new ExhibitsListBuilder(data, ExhibitsListActivity.this);
                 ALLdata = data;
             }
 //            saveStatus(ALLdata);
@@ -773,7 +790,13 @@ public class ExhibitsListActivity extends AppCompatActivity
                 } else {
                     img = getString(R.string.BASE_API_URL) + buildExhibits.imgById(exhibitsId.get(i));
                 }
-                exhibits.add(new ExhibitsList(name, body, img, date));
+                String img_fav_name = buildExhibits.mainImageNameByid(exhibitsId.get(i));
+                if (fav_exh) {
+                    exhibits.add(new ExhibitsList(name, body, img, date, true, img_fav_name));
+                } else {
+                    img_fav_name = "";
+                    exhibits.add(new ExhibitsList(name, body, img, date, false, img_fav_name));
+                }
             }
             int index = lvMain.getFirstVisiblePosition();
             int top = (lvMain.getChildAt(0) == null) ? 0 : lvMain.getChildAt(0).getTop();

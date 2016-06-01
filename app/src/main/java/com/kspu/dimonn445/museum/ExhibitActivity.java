@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -37,6 +38,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
@@ -46,7 +50,7 @@ public class ExhibitActivity extends AppCompatActivity
 
     private TextView exhibitname, exhibitdescription, exhibiturl, exhibitCharacteristics, readMore;
     private SliderLayout mSlider;
-    private String crop_string = "", bodyShort = "", art_title = "", body = "", exhId, dateStarted, dateFinish, mainImg, search_query;
+    private String crop_string = "", bodyShort = "", art_title = "", body = "", exhId, dateStarted, dateFinish, mainImg, search_query, bodyShort_fav, exh_name_fav, img_fav_url, img_fav_name;
     private String ExhId, ExhName, catName, catId;
     final String APP_PREFERENCES = "EXHIBIT";
     final String EXHIBIT_PREFERENCES = "SAVED_EXHIBITS";
@@ -92,7 +96,11 @@ public class ExhibitActivity extends AppCompatActivity
             chek = true;
 //            all_exh = false;
         }
-
+        if (fav_exh) {
+            bodyShort_fav = getIntent().getStringExtra("body_short");
+            exh_name_fav = ExhName;
+            img_fav_name = getIntent().getStringExtra("img_fav_name");
+        }
         /*Log.d("OK", "ExhId: " + ExhId);
         Log.d("OK", "ExhName: " + ExhName);*/
 
@@ -100,8 +108,12 @@ public class ExhibitActivity extends AppCompatActivity
 
         if (isNetworkAvailable()) {
             FillData();
-        } else
+        } else {
+            if (fav_exh) {
+                FillData();
+            }
             Toast.makeText(this, this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
+        }
         checkExhPref();
 
         //--------------------------------Navigation Drawer start-------------------------------------
@@ -174,9 +186,19 @@ public class ExhibitActivity extends AppCompatActivity
                 Log.d("OK", "isChecked: " + isChecked);
                 if (isChecked) {
                     SaveExhPref();
+
+                    ImageSaver ims = new ImageSaver(ExhibitActivity.this);
+                    ims.setFileName(img_fav_name)
+                            .setDirectoryName("exh_images")
+                            .save(img_fav_url);
+
                     checkFavourite.setText(getString(R.string.fav_ch));
                 } else {
                     DeleteExhref();
+                    ImageSaver ims = new ImageSaver(ExhibitActivity.this);
+                    ims.setFileName(img_fav_name)
+                            .setDirectoryName("exh_images")
+                            .deleteFile();
                     checkFavourite.setText(getString(R.string.add_to_fav));
                 }
             }
@@ -352,6 +374,8 @@ public class ExhibitActivity extends AppCompatActivity
             //crop_string="";
             art_title = exh.getExhTitle();
 //        art_title = ExhName;
+
+
             bodyShort = exh.getBodyShort();
             dateStarted = exh.getDateStarted();
             dateFinish = exh.getDateFinish();
@@ -379,7 +403,7 @@ public class ExhibitActivity extends AppCompatActivity
             if (charackeristics.isEmpty()) {
                 exhibitCharacteristics.setText("");
             } else {
-                exhibitCharacteristics.setText(Html.fromHtml("<br><br><br>" + "<font color=\"#66000000\">"+getString(R.string.characteristics)+"</font>" + "<br>" + charackeristics));
+                exhibitCharacteristics.setText(Html.fromHtml("<br><br><br>" + "<font color=\"#66000000\">" + getString(R.string.characteristics) + "</font>" + "<br>" + charackeristics));
             }
             exh.getMediaCDN();
             exh.getMediaImg();
@@ -428,7 +452,8 @@ public class ExhibitActivity extends AppCompatActivity
                     img_arr.add(exh.imgCdn.get(i));
                 }
             }
-
+            img_fav_url = exh.returnMainImage();
+            img_fav_name = exh.returnMainImageName();
 //        url_maps.put("img","http://17047.s.time4vps.eu:3021/uploads/image/7/7/77757a49145dea723271fcf336fff670_md.jpg");
         /*url_maps.put("Hannibal", "http://static2.hypable.com/wp-content/uploads/2013/12/hannibal-season-2-release-date.jpg");
         url_maps.put("Big Bang Theory", "http://tvfiles.alphacoders.com/100/hdclearart-10.png");*/
@@ -451,7 +476,6 @@ public class ExhibitActivity extends AppCompatActivity
                     .putString("extra", name);
             mSlider.addSlider(sliderView);
         }*/
-
             for (String name : url_maps.keySet()) {
                 final DefaultSliderView sliderView = new DefaultSliderView(this);
                 Log.d("OK", "url_maps: " + url_maps.get(name));
@@ -486,13 +510,42 @@ public class ExhibitActivity extends AppCompatActivity
 
 //--------------------------slider--------------------
         } else {
+            if (fav_exh) {
+
+                exhibitname.setText(exh_name_fav + " " + getString(R.string.brief_description));
+                exhibitdescription.setText(bodyShort_fav);
+
+                DefaultSliderView sliderView = new DefaultSliderView(this);
+                Log.d("OK", "img_fav_name: " + img_fav_name);
+
+                File d = new ImageSaver(ExhibitActivity.this).
+                        setFileName(img_fav_name).
+                        setDirectoryName("exh_images").
+                        load();
+
+                sliderView
+//                    .description(name)
+                        .image(d)
+                        .setScaleType(BaseSliderView.ScaleType.Fit);
+                //add your extra information
+                sliderView.bundle(new Bundle());
+                sliderView.getBundle()
+                        .putString("extra", "img1");
+                mSlider.addSlider(sliderView);
+
+                mSlider.setCurrentPosition(0);
+                mSlider.setPresetTransformer(SliderLayout.Transformer.DepthPage);
+                mSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+                mSlider.setCustomAnimation(new DescriptionAnimation());
+                mSlider.setDuration(6000);
+            }
             Toast.makeText(ExhibitActivity.this, ExhibitActivity.this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
-            exhibitname.setVisibility(View.INVISIBLE);
-            exhibitdescription.setVisibility(View.INVISIBLE);
+//            exhibitname.setVisibility(View.INVISIBLE);
+//            exhibitdescription.setVisibility(View.INVISIBLE);
             exhibitCharacteristics.setVisibility(View.INVISIBLE);
             exhibiturl.setVisibility(View.INVISIBLE);
             readMore.setVisibility(View.INVISIBLE);
-            mSlider.setVisibility(View.INVISIBLE);
+//            mSlider.setVisibility(View.INVISIBLE);
             checkFavourite.setVisibility(View.INVISIBLE);
         }
     }

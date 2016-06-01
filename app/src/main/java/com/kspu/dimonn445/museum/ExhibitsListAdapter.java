@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -63,7 +64,17 @@ public class ExhibitsListAdapter extends BaseAdapter {
         ((TextView) view.findViewById(R.id.exhibitDate)).setText(p.date);
 //        ((ImageView) view.findViewById(R.id.icon)).setImageResource(p.image);
 //        ((ImageView) view.findViewById(R.id.icon));
-        Picasso.with(ctx).load(p.image).error(R.drawable.ic_report_problem_black_36dp).placeholder(R.drawable.ic_loop_black_36dp)/*.resize(200, 200)*/.into(((ImageView) view.findViewById(R.id.icon)));
+
+        File d = new ImageSaver(ctx).
+                setFileName(p.img_fav_name).
+                setDirectoryName("exh_images").
+                load();
+
+        if(p.check){
+            Picasso.with(ctx).load(d).error(R.drawable.ic_report_problem_black_36dp).placeholder(R.drawable.ic_loop_black_36dp)/*.resize(200, 200)*/.into(((ImageView) view.findViewById(R.id.icon)));
+        }else {
+            Picasso.with(ctx).load(p.image).error(R.drawable.ic_report_problem_black_36dp).placeholder(R.drawable.ic_loop_black_36dp)/*.resize(200, 200)*/.into(((ImageView) view.findViewById(R.id.icon)));
+        }
         /*CheckBox cbFav = (CheckBox)view.findViewById(R.id.checkBoxFavorite);
         cbFav.setOnCheckedChangeListener(myCheckChangList);
         cbFav.setTag(position);

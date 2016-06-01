@@ -922,12 +922,7 @@ public class MainActivity extends AppCompatActivity
                 } catch (IndexOutOfBoundsException e) {
                     e.printStackTrace();
                 }
-            } else if (id == R.id.nav_favourite) {
-                Intent intent = new Intent(MainActivity.this, ExhibitsListActivity.class);
-                intent.putExtra("fav_exh", true);
-                intent.putExtra("CatName", getString(R.string.fav));
-                startActivity(intent);
-                finish();
+//            } else
             /*} else if (id == R.id.nav_all_exhibits) {
                 Intent intent = new Intent(MainActivity.this, ExhibitsListActivity.class);
                 intent.putExtra("all_exh", true);
@@ -957,6 +952,14 @@ public class MainActivity extends AppCompatActivity
         }
         if (id == R.id.nav_exit) {
             openQuitDialog();
+        }
+
+        if (id == R.id.nav_favourite) {
+            Intent intent = new Intent(MainActivity.this, ExhibitsListActivity.class);
+            intent.putExtra("fav_exh", true);
+            intent.putExtra("CatName", getString(R.string.fav));
+            startActivity(intent);
+            finish();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
