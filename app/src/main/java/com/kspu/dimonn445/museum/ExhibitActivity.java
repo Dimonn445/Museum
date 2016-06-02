@@ -507,6 +507,7 @@ public class ExhibitActivity extends AppCompatActivity
             mSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
             mSlider.setCustomAnimation(new DescriptionAnimation());
             mSlider.setDuration(6000);
+            mSlider.stopAutoCycle();
 
 //--------------------------slider--------------------
         } else {
@@ -545,7 +546,7 @@ public class ExhibitActivity extends AppCompatActivity
             exhibitCharacteristics.setVisibility(View.INVISIBLE);
             exhibiturl.setVisibility(View.INVISIBLE);
             readMore.setVisibility(View.INVISIBLE);
-//            mSlider.setVisibility(View.INVISIBLE);
+            mSlider.setVisibility(View.INVISIBLE);
             checkFavourite.setVisibility(View.INVISIBLE);
         }
     }

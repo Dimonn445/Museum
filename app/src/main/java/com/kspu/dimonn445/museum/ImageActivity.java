@@ -77,7 +77,7 @@ public class ImageActivity extends AppCompatActivity {
         mSlider.setPresetTransformer(SliderLayout.Transformer.DepthPage);
         mSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
         mSlider.setCustomAnimation(new DescriptionAnimation());
-        mSlider.setDuration(6000);
+        mSlider.setDuration(4000);
     }
 
     private void obp() {
