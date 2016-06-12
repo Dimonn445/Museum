@@ -30,9 +30,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
+import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
+import com.daimajia.slider.library.SliderTypes.TextSliderView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,6 +52,7 @@ public class ExhibitActivity extends AppCompatActivity
 
     private TextView exhibitname, exhibitdescription, exhibiturl, exhibitCharacteristics, readMore;
     private SliderLayout mSlider;
+    private PagerIndicator pagerIndicator;
     private String crop_string = "", bodyShort = "", art_title = "", body = "", exhId, dateStarted, dateFinish, mainImg, search_query, bodyShort_fav, exh_name_fav, img_fav_url, img_fav_name;
     private String ExhId, ExhName, catName, catId;
     final String APP_PREFERENCES = "EXHIBIT";
@@ -211,7 +214,7 @@ public class ExhibitActivity extends AppCompatActivity
         exhibitCharacteristics = (TextView) findViewById(R.id.exhibitCharacteristics);
         exhibiturl = (TextView) findViewById(R.id.exhibitUrls);
         readMore = (TextView) findViewById(R.id.exhibitReadMore);
-
+        pagerIndicator =(PagerIndicator) findViewById(R.id.custom_indicator);
         mSlider = (SliderLayout) findViewById(R.id.slider);
         checkFavourite = (CheckBox) findViewById(R.id.checkBoxFav);
         ViewGroup.LayoutParams params = mSlider.getLayoutParams();
@@ -497,17 +500,20 @@ public class ExhibitActivity extends AppCompatActivity
                             }
                         });
                 //add your extra information
-                sliderView.bundle(new Bundle());
+                /*sliderView.bundle(new Bundle());
                 sliderView.getBundle()
-                        .putString("extra", name);
+                        .putString("extra", name);*/
                 mSlider.addSlider(sliderView);
             }
-            mSlider.setCurrentPosition(0);
+
             mSlider.setPresetTransformer(SliderLayout.Transformer.DepthPage);
-            mSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-            mSlider.setCustomAnimation(new DescriptionAnimation());
-            mSlider.setDuration(6000);
+            mSlider.setCustomIndicator((PagerIndicator) findViewById(R.id.custom_indicator));
+
+//            mSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+//            mSlider.setCustomAnimation(new DescriptionAnimation());
+//            mSlider.setDuration(6000);
             mSlider.stopAutoCycle();
+            mSlider.setCurrentPosition(0);
 
 //--------------------------slider--------------------
         } else {
@@ -523,22 +529,22 @@ public class ExhibitActivity extends AppCompatActivity
                         setFileName(img_fav_name).
                         setDirectoryName("exh_images").
                         load();
-
                 sliderView
 //                    .description(name)
                         .image(d)
                         .setScaleType(BaseSliderView.ScaleType.Fit);
                 //add your extra information
-                sliderView.bundle(new Bundle());
+                /*sliderView.bundle(new Bundle());
                 sliderView.getBundle()
-                        .putString("extra", "img1");
+                        .putString("extra", "img1");*/
                 mSlider.addSlider(sliderView);
-
-                mSlider.setCurrentPosition(0);
+//                mSlider.setCurrentPosition(0);
                 mSlider.setPresetTransformer(SliderLayout.Transformer.DepthPage);
-                mSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-                mSlider.setCustomAnimation(new DescriptionAnimation());
-                mSlider.setDuration(6000);
+//                mSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+                mSlider.setCustomIndicator(pagerIndicator);
+                mSlider.stopAutoCycle();
+//                mSlider.setCustomAnimation(new DescriptionAnimation());
+//                mSlider.setDuration(6000);
             }
             Toast.makeText(ExhibitActivity.this, ExhibitActivity.this.getString(R.string.internet_connection_is_not), Toast.LENGTH_SHORT).show();
 //            exhibitname.setVisibility(View.INVISIBLE);
@@ -546,8 +552,9 @@ public class ExhibitActivity extends AppCompatActivity
             exhibitCharacteristics.setVisibility(View.INVISIBLE);
             exhibiturl.setVisibility(View.INVISIBLE);
             readMore.setVisibility(View.INVISIBLE);
-            mSlider.setVisibility(View.INVISIBLE);
+//            mSlider.setVisibility(View.INVISIBLE);
             checkFavourite.setVisibility(View.INVISIBLE);
+            pagerIndicator.setVisibility(View.INVISIBLE);
         }
     }
 

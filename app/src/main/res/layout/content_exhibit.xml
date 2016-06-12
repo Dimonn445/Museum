@@ -15,30 +15,39 @@
         android:id="@+id/slider"
         android:layout_width="match_parent"
         android:layout_height="240dp"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentTop="true" />
+
+    <com.daimajia.slider.library.Indicators.PagerIndicator
+        android:id="@+id/custom_indicator"
+        style="@style/AndroidImageSlider_Attractive_Rect_Blue"
+        android:layout_alignBottom="@+id/slider"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true" />
 
     <CheckBox
+        android:id="@+id/checkBoxFav"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/checkBoxFav"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/slider"
         android:button="@drawable/selector_check"
-        android:text="@string/add_to_fav"
         android:padding="10dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:text="@string/add_to_fav" />
 
     <TextView
         android:id="@+id/exhibitName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="exhibitName"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_below="@+id/checkBoxFav"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/checkBoxFav"
+        android:text="exhibitName"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:id="@+id/exhibitDescription"
@@ -54,35 +63,34 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
+        android:id="@+id/exhibitReadMore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceButton"
-        android:text="@string/read_more"
-        android:id="@+id/exhibitReadMore"
-        android:clickable="true"
-        android:layout_below="@+id/exhibitDescription"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:background="#FF4081"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/exhibitDescription"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:background="#FF4081"
+        android:clickable="true"
         android:padding="10dp"
-        />
+        android:text="@string/read_more"
+        android:textAppearance="?android:attr/textAppearanceButton" />
 
     <TextView
         android:id="@+id/exhibitCharacteristics"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/exhibitReadMore"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/exhibitDescription"
-        android:text="exhibitCharacteristics"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_toStartOf="@+id/exhibitReadMore"
         android:layout_alignRight="@+id/exhibitReadMore"
-        android:layout_alignEnd="@+id/exhibitReadMore"
-        android:layout_marginBottom="20dp" />
+        android:layout_below="@+id/exhibitDescription"
+        android:layout_marginBottom="20dp"
+        android:layout_toStartOf="@+id/exhibitReadMore"
+        android:text="exhibitCharacteristics"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/exhibitUrls"
@@ -92,10 +100,10 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/exhibitCharacteristics"
         android:linksClickable="true"
+        android:paddingBottom="2dp"
         android:paddingLeft="10dip"
+        android:paddingTop="2dp"
         android:text="exhibitUrls"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textStyle="italic"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp" />
+        android:textStyle="italic" />
 </RelativeLayout>

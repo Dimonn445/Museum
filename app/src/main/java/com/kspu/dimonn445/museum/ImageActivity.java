@@ -7,9 +7,11 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
+import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
+import com.daimajia.slider.library.SliderTypes.TextSliderView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,16 +70,18 @@ public class ImageActivity extends AppCompatActivity {
                         }
                     });
             //add your extra information
-            sliderView.bundle(new Bundle());
+            /*sliderView.bundle(new Bundle());
             sliderView.getBundle()
-                    .putString("extra", name);
+                    .putString("extra", name);*/
             mSlider.addSlider(sliderView);
         }
-        mSlider.setCurrentPosition(cur_pos);
+
         mSlider.setPresetTransformer(SliderLayout.Transformer.DepthPage);
-        mSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-        mSlider.setCustomAnimation(new DescriptionAnimation());
-        mSlider.setDuration(4000);
+//        mSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+        mSlider.setCustomIndicator((PagerIndicator)findViewById(R.id.custom_indicator));
+//        mSlider.setCustomAnimation(new DescriptionAnimation());
+        mSlider.setDuration(5000);
+        mSlider.setCurrentPosition(cur_pos);
     }
 
     private void obp() {

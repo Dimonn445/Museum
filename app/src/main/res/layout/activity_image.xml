@@ -18,4 +18,10 @@
         android:layout_height="match_parent"
         />
 
+    <com.daimajia.slider.library.Indicators.PagerIndicator
+        android:id="@+id/custom_indicator"
+        style="@style/AndroidImageSlider_Attractive_Rect_Blue"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_gravity="center_horizontal|bottom" />
 </FrameLayout>
